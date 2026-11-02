@@ -43,6 +43,29 @@ node --test --test-timeout=20000 scripts/*.test.mjs  # 84 tests (run after build
 
 Create a Twitch application and set `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` and the public URL on the server (see [`deploy/TWITCH-ja.md`](deploy/TWITCH-ja.md)). Each streamer then clicks 「自分のTwitchと連携」 (Connect my Twitch) in their room and authorizes `user:read:chat`. Votes are read via EventSub WebSocket and scoped per room. No secrets are stored in this repository.
 
+## Deploy to a public server (Cloudflare → nginx → Node)
+
+The live instance runs this way. Full step-by-step notes (Japanese) are in [`deploy/README-ja.md`](deploy/README-ja.md). Replace `goblin-vs-hero.kitakuarcade.com` with your own domain.
+
+```
+Browser ──HTTPS──▶ Cloudflare (proxy ON) ──HTTPS──▶ nginx :443 ──▶ Node 127.0.0.1:8788
+                                                     (WebSocket upgrade for /party and /lobby)
+```
+
+1. **Build a package** locally with `npm run build`, then copy `dist/`, `server/`, `deploy/`, `package.json` and `package-lock.json` to `/opt/goblin-vs-hero` on a Linux x86_64 server.
+2. **Install the service.** Run `sudo bash deploy/install.sh`. It downloads an official Node 24 runtime (SHA256-verified) into `runtime/` without touching the system Node, creates a `goblin-game` system user, runs `npm ci --omit=dev` and starts the systemd service `goblin-vs-hero` on `127.0.0.1:8788`. Set `PUBLIC_ORIGIN` in [`deploy/goblin-vs-hero.service`](deploy/goblin-vs-hero.service) to your URL (it is used for QR invitations).
+3. **Check it internally:**
+   ```bash
+   curl -f http://127.0.0.1:8788/healthz
+   /opt/goblin-vs-hero/runtime/bin/node deploy/smoke.mjs http://127.0.0.1:8788
+   ```
+4. **Cloudflare.** Add a DNS record for your subdomain with the proxy ON (orange cloud) and SSL mode "Full (strict)". Create a Cloudflare Origin Certificate and save it on the server, for example as `/etc/ssl/cloudflare/cert.pem` and `key.pem`. WebSockets work through Cloudflare by default.
+5. **nginx.** Install [`deploy/nginx-goblin-vs-hero.conf`](deploy/nginx-goblin-vs-hero.conf) into `sites-available`, link it into `sites-enabled`, then run `nginx -t && systemctl reload nginx`. The config proxies `/party` and `/lobby` with `Upgrade`/`Connection` headers for WebSockets and everything else as plain HTTP.
+6. **Verify publicly:** `node deploy/smoke.mjs https://your.domain`
+7. **Twitch (optional).** Edit the Client ID in `deploy/configure-twitch.sh` to your Twitch app, then run `sudo bash deploy/configure-twitch.sh`. It prompts for the secret and writes `TWITCH_CLIENT_ID` / `TWITCH_CLIENT_SECRET` to `/etc/goblin-vs-hero/twitch.env` (outside the repository). Register `https://your.domain/auth/twitch/callback` as the OAuth redirect URL. See [`deploy/TWITCH-ja.md`](deploy/TWITCH-ja.md).
+
+**Updates:** `node deploy/update.mjs /opt/goblin-vs-hero-latest.tar.gz` stages the new version, smoke-tests it on a spare port, backs up code and `data/`, switches over and rolls back automatically if the post-switch check fails.
+
 ## Architecture
 
 - `server/` is a Node.js lobby, matchmaking and WebSocket relay, plus Twitch OAuth and EventSub (`twitch.js`, `twitch-chat.js`).
