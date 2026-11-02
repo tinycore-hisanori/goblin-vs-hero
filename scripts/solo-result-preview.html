@@ -1,0 +1,8 @@
+<!doctype html><html><meta charset="utf-8"><title>Result UI verification</title><body style="background:#17292c;color:white;font:16px system-ui"><button id="solo">Solo result</button><button id="party">Party result</button><p id="chosen"></p><script type="module">
+import '../src/i18n.js';
+import {mountRoundEnd} from '../src/round-end.js';
+const choose=action=>{document.querySelector('#chosen').textContent=action;solo.render();party.render();};
+const solo=mountRoundEnd(document.body,{solo:true,choose}),party=mountRoundEnd(document.body,{choose});
+document.querySelector('#solo').onclick=()=>solo.render({visible:true,roundKey:Date.now(),result:'脱出成功！',canChoose:true});
+document.querySelector('#party').onclick=()=>party.render({visible:true,roundKey:Date.now(),result:'脱出成功！',canChoose:true});
+</script></body></html>

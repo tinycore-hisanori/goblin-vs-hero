@@ -1,0 +1,8 @@
+.sound-toggle{position:absolute;z-index:8;right:max(12px,env(safe-area-inset-right));top:116px;min-width:64px;min-height:40px;padding:8px 10px;border:1px solid #d6e0c350;border-radius:10px;background:#10282dbf;color:#eee7cf;font:11px system-ui;cursor:pointer;touch-action:manipulation;backdrop-filter:blur(6px)}
+.sound-toggle[aria-pressed="false"]{color:#9caeab;border-color:#90a39e38}
+.sound-toggle:focus-visible{outline:2px solid #eacb86;outline-offset:2px}
+.hero-sound{position:fixed;top:72px;left:28px;right:auto;z-index:40}
+@media(max-width:780px){.hero-sound{left:16px;top:54px}}
+
+.sound-toggle.lobby-sound{position:fixed;top:auto;bottom:max(16px,env(safe-area-inset-bottom));right:max(16px,env(safe-area-inset-right));z-index:50;min-width:96px;min-height:44px;background:#10282df2;color:#f3e2ae;border:1px solid #b9a36c;font:600 13px system-ui}
+.sound-toggle.lobby-sound[aria-pressed="false"]{background:#172329f2;color:#c4d0ce;border-color:#829794}

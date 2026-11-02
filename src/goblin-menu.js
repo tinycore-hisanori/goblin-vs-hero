@@ -7,7 +7,7 @@ export function mountGoblinMenu({clearInput,focusGame,resumeDirect,onAttackTarge
  const toggle=document.createElement('button');toggle.id='menu-toggle';toggle.textContent='メニュー';toggle.setAttribute('aria-controls','goblin-menu');toggle.setAttribute('aria-expanded','false');$('goblin-world').append(toggle);
  const nav=$('goblin-nav');heading.after(nav);nav.querySelector('[data-mobile-panel="map"]').textContent='戻る';
  const settingsTab=document.createElement('button');settingsTab.dataset.mobilePanel='settings';settingsTab.textContent='設定';settingsTab.setAttribute('aria-pressed','false');nav.append(settingsTab);settingsTab.onclick=()=>show('settings');
- const settings=document.createElement('section');settings.dataset.panel='settings';settings.innerHTML='<h2>操作と視点</h2><p>画面をドラッグすると視点を回せます。PC：WASD／矢印で移動、左クリックで攻撃、Spaceでジャンプ、Shiftでスニーク、移動キー2回でダッシュ。Eで食べる、2で投石、Fで同族殺しON／OFF、Vで視点変更、Mで地図、Tabでメニュー、Gで進化画面。クリックでカーソル固定、Escで解除。固定できない場合は右ドラッグで視点変更。</p>';
+ const settings=document.createElement('section');settings.dataset.panel='settings';settings.innerHTML='<h2>操作と視点</h2><p>画面をドラッグすると視点を回せます。PC：WASD／矢印で移動、左クリックで攻撃、Spaceでジャンプ、Shiftで2倍速ダッシュ。Eで食べる、2で投石、Fで同族殺しON／OFF、Vで視点変更、Mで地図、Tabでメニュー、Gで進化画面。クリックでカーソル固定、Escで解除。固定できない場合は右ドラッグで視点変更。</p><p>N：音のON／OFF</p><p>Esc：メニューを開く／閉じる</p>';
  // Keep one camera button on the field; detailed controls belong in settings.
  $('goblin-world').append($('camera-preset'));
  settings.prepend(createLanguageControl());settings.append($('control-mode'),$('camera-controls'),$('connection'));drawer.append(settings);
@@ -27,7 +27,7 @@ export function mountGoblinMenu({clearInput,focusGame,resumeDirect,onAttackTarge
  }
  document.addEventListener('keydown',e=>{
   if(document.body.dataset.mobilePanel==='map')return;
-  if(e.code==='Escape'){e.preventDefault();show('map');}
+  if(e.code==='Escape'){e.preventDefault();e.stopPropagation();if(!e.repeat)show('map');return;}
   if(e.code==='Tab'){
    const all=[...drawer.querySelectorAll('button,input,select,[tabindex]')].filter(el=>!el.disabled&&el.getClientRects().length),first=all[0],last=all.at(-1);
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}

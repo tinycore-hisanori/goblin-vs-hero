@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Music playback verification</title>
+<style>body{background:#10242b;color:#e8dfbf;font:16px system-ui;padding:28px}button{padding:14px;margin:8px}pre{white-space:pre-wrap;line-height:2}.sound-toggle{top:28px}</style>
+<h1>Music playback verification</h1><button id="lobby">Lobby / preparation</button><button id="dungeon">Begin exploration</button><button id="escape">Collect treasure</button><button id="finish">Finish / rematch</button><pre id="status"></pre>
+<script type="module">
+import {mountGameAudio} from '../src/game-audio.js';
+import {musicScene} from '../src/music.js';
+const tracks=[],NativeAudio=window.Audio;window.Audio=class extends NativeAudio{constructor(url){super(url);tracks.push(this);}};
+const analysers=[],NativeContext=window.AudioContext;window.AudioContext=class extends NativeContext{createMediaElementSource(media){const source=super.createMediaElementSource(media),analyser=this.createAnalyser(),silent=this.createGain();silent.gain.value=0;source.connect(analyser);analyser.connect(silent);silent.connect(this.destination);analysers.push(analyser);return source;}};
+const audio=mountGameAudio(document.body);let scene='lobby';
+for(const [id,state]of Object.entries({lobby:{},dungeon:{started:true},escape:{started:true,collected:true},finish:{started:true,ended:true}}))document.getElementById(id).onclick=()=>{scene=musicScene(state);audio.setMusic(scene);};
+setInterval(()=>{document.getElementById('status').textContent=`Scene: ${scene}\n`+tracks.map((track,i)=>{const values=new Float32Array(1024);analysers[i]?.getFloatTimeDomainData(values);const rms=Math.sqrt(values.reduce((sum,v)=>sum+v*v,0)/values.length);return `${track.src.split('/').at(-1)||'Retired'} | ${track.paused?'PAUSED':'PLAYING'} | ${track.currentTime.toFixed(1)} / ${Number(track.duration).toFixed(1)} seconds | signal ${rms.toFixed(4)} | error ${track.error?.code||0}`;}).join('\n');},150);
+</script></html>

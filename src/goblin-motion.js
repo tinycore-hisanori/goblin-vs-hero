@@ -15,7 +15,7 @@ export function setupGoblinMotion(g,clips){
  loadPunch().then(data=>{if(g.motion!==motion)return;motion.punch=g.mixer.clipAction(retargetPunch(g.model,data));}).catch(e=>console.warn('攻撃モーション読み込み失敗',e));
 }
 export function resetGoblinMotion(g){
- const m=g.motion;g.mixer.stopAllAction();m.current=null;m.age=0;m.mode=null;m.attackTime=0;m.lastAttack=g.attackSeq||0;g.model.position.y=0;g.model.rotation.z=0;
+ const m=g.motion;g.mixer.stopAllAction();m.current=null;m.age=0;m.mode=null;m.attackTime=0;m.lastAttack=g.attackSeq||0;g.model.position.y=0;g.model.rotation.x=0;g.model.rotation.z=0;
  for(const b of m.bones){b.bone.position.copy(b.position);b.bone.quaternion.copy(b.quaternion);b.bone.scale.copy(b.scale);}
 }
 export function updateGoblinMotion(g,dt,moving,mode){

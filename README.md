@@ -36,7 +36,7 @@ Production build and tests:
 ```sh
 npm run build
 npm start                                            # node server/production.js
-node --test --test-timeout=20000 scripts/*.test.mjs  # 89 tests (run after build)
+node --test --test-timeout=20000 scripts/*.test.mjs  # 119 tests (run after build)
 ```
 
 ### Twitch chat voting (optional)

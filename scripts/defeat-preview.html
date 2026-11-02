@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Goblin defeat animation</title>
+<style>body{margin:0;background:#12242a;color:#eee;font:14px system-ui}header{padding:10px;display:flex;gap:10px;align-items:center}button{padding:10px}#scene{height:calc(100vh - 65px)}#scene canvas{display:block;width:100%;height:100%}</style>
+<header><button data-age="-1">Alive</button><button data-age="0.3">Falling</button><button data-age="0.8">On the floor</button><button data-age="1.8">Sinking</button><button data-age="2.8">Absorbed</button><span id="phase">On the floor · 0.8s</span></header><div id="scene"></div>
+<script type="module">
+import {createGoblinWorld} from '../src/goblin-world.js';
+import {world,tiles,layoutVersion} from '../src/dungeon.js';
+const view=createGoblinWorld(document.querySelector('#scene')),p=world(5,21);let age=.8;
+function update(){view.update({layoutVersion,layout:tiles.map(r=>r.join('')),goblins:[{id:'victim',...p,y:0,yaw:Math.PI,hp:age<0?3:0,defeatAge:age,stage:-1,name:'AI Goblin',color:'#a4b98f'}],hero:{x:100,y:0,z:100},traps:[],stones:[],foodTaken:[],gateOpen:false},{goblinId:'victim',command:'direct'});}
+document.querySelectorAll('button').forEach(button=>button.onclick=()=>{age=Number(button.dataset.age);document.querySelector('#phase').textContent=`${button.textContent} · ${age<0?'Alive':age+'s'}`;update();});setInterval(update,50);update();
+</script></html>

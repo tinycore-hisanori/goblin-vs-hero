@@ -28,6 +28,6 @@ export function buildNest(scene,box,material){
  const gym=world(5,21);box(3.4,.025,3.8,gym.x,.035,gym.z,material('#8c764a'));for(const side of [-1,1])box(.04,.008,3.7,gym.x+side*1.6,.054,gym.z,cloth);sign('鍛錬して、強くなれ',gym.x,gym.z-2.5);
  // Footprints and spilled food make the two wings visually distinct.
  for(let i=0;i<8;i++){const p=world(8+i*.5,14);const mark=box(.12,.009,.25,p.x,.04,p.z+(i%2?.22:-.22),darkWood);mark.rotation.y=.2;}
- const lp=leverPosition,leverBase=box(.65,.45,.65,lp.x,.225,lp.z,iron),lever=box(.09,.7,.09,lp.x,.75,lp.z,wood);lever.rotation.z=-.5;sphere(.12,lp.x+.16,1.08,lp.z,gold);sign('宝物庫の開閉レバー',lp.x,lp.z-.8);
+ const lp=leverPosition,leverBase=box(.65,.45,.65,lp.x,.225,lp.z,iron),lever=new THREE.Group();lever.position.set(lp.x,.45,lp.z);scene.add(lever);const shaft=box(.09,.7,.09,0,.35,0,wood),knob=sphere(.12,0,.7,0,gold);shaft.name='lever-shaft';knob.name='lever-knob';lever.add(shaft,knob);lever.rotation.z=-.5;sign('宝物庫の開閉レバー',lp.x,lp.z-.8);
  return {lever,leverBase,food:buildFood(scene)};
 }

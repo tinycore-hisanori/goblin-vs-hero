@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {LocalSession} from '../src/local-session.js';
 import {world,valid,beds} from '../src/dungeon.js';
+import {cameraMovement} from '../src/goblin-camera.js';
 
 function fixture(t,start=world(5,21)){
  const goblins=[],hero=new THREE.Vector3(100,0,100);let damage=0;
@@ -33,11 +34,22 @@ test('friendly-fire OFF blocks direct melee, stones, and Auto hunting; ON permit
 test('hero stays attackable when friendly-fire is ON, but attacks cannot hit behind the view',t=>{
  const f=fixture(t),p=f.m.g.root.position;f.hero.copy(p).add(new THREE.Vector3(0,0,.9));f.command({type:'friendly-fire',enabled:true});f.command({type:'direct',dx:0,dz:0,yaw:Math.PI,attack:true});f.step(.1);assert.equal(f.damage(),0);f.m.g.cooldown=0;f.command({type:'direct',dx:0,dz:0,yaw:0,attack:true});f.step(.1);assert.equal(f.damage(),3);
 });
-test('sneaking and sprinting use the hero multipliers and diagonal movement is bounded',t=>{
+test('sprint doubles movement, legacy sneak flags have no effect, and diagonal speed is bounded',t=>{
  const f=fixture(t),p=f.m.g.root.position,start=p.clone();
  const distanceFor=flags=>{p.copy(start);f.command({type:'direct',dx:1,dz:1,...flags});f.step(.1);return p.distanceTo(start);};
- const normal=distanceFor({}),sneak=distanceFor({sneaking:true}),sprint=distanceFor({sprinting:true});assert(Math.abs(sneak/normal-.46)<1e-6);assert(Math.abs(sprint/normal-1.44)<1e-6);assert(normal<.17);
+ const normal=distanceFor({}),sneak=distanceFor({sneaking:true}),sprint=distanceFor({sprinting:true});assert(Math.abs(sneak/normal-1)<1e-6);assert(Math.abs(sprint/normal-2)<1e-6);assert(normal<.17);
 });
 test('a short click hits even between movement packets, and respects the attack cooldown',t=>{
  const f=fixture(t),p=f.m.g.root.position;f.hero.copy(p).add(new THREE.Vector3(0,0,1));f.command({type:'direct',dx:0,dz:0});f.command({type:'strike',yaw:0});assert.equal(f.damage(),3);f.command({type:'strike',yaw:0});assert.equal(f.damage(),3);
+});
+test('walking faces every camera-relative movement direction, retains facing when stopped, and still aims attacks',t=>{
+ const f=fixture(t),g=f.m.g,start=g.root.position.clone();
+ for(const cameraYaw of [0,.7,Math.PI])for(const [x,z] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1]]){
+  g.root.position.copy(start);const move=cameraMovement(x,z,cameraYaw);
+  f.command({type:'direct',...move,yaw:cameraYaw+Math.PI});f.step(.1);
+  const expected=Math.atan2(move.dx,move.dz);assert(Math.abs(g.root.rotation.y-expected)<1e-8);
+  assert(g.root.position.distanceTo(start)>.01);
+  f.command({type:'direct',dx:0,dz:0,yaw:cameraYaw});f.step(.1);assert(Math.abs(g.root.rotation.y-expected)<1e-8);
+ }
+ f.hero.copy(g.root.position).add(new THREE.Vector3(0,0,1));f.command({type:'strike',yaw:0});assert.equal(f.damage(),3);
 });

@@ -1,8 +1,8 @@
 export const EVOLUTIONS=[
  {id:'goblin',name:'ゴブリン',xp:0,hp:6,damage:1,height:.8,speed:1.6,abilities:{burrows:true,climb:true},model:'/models/viewer-goblin.glb'},
- {id:'hob',name:'ホブゴブリン',xp:30,hp:10,damage:2,height:1.05,speed:1.5,abilities:{burrows:false,climb:true},model:'/models/hob-goblin.glb'},
- {id:'king',name:'ゴブリン・キング',xp:90,hp:16,damage:3,height:1.25,speed:1.3,abilities:{burrows:false,climb:false},model:'/models/goblin-king.glb'},
- {id:'lord',name:'ゴブリン・ロード',xp:180,hp:22,damage:5,height:1.55,speed:1.15,abilities:{burrows:false,climb:false},model:'/models/goblin-lord.glb'}
+ {id:'hob',name:'ホブゴブリン',xp:30,hp:10,damage:2,height:1.05,speed:1.85,abilities:{burrows:false,climb:true},model:'/models/hob-goblin.glb'},
+ {id:'king',name:'ゴブリン・キング',xp:90,hp:16,damage:3,height:1.25,speed:2.1,abilities:{burrows:false,climb:false},model:'/models/goblin-king.glb'},
+ {id:'lord',name:'ゴブリン・ロード',xp:180,hp:22,damage:5,height:1.55,speed:2.35,abilities:{burrows:false,climb:false},model:'/models/goblin-lord.glb'}
 ];
 export const REWARDS=[
  {id:'rookie',name:'巣の新入り',test:()=>true,color:'#ed9b47'},

@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Background host verification</title>
+<style>body{background:#13252a;color:white;font:14px system-ui}iframe{width:1100px;height:620px}a{color:#ffd88b}</style>
+<p id="state">Loading host</p><a id="guest">Waiting for room</a><iframe src="/index.html?partyHero=1" title="Real hero host"></iframe>
+<script type="module">
+let room='';function status(){document.querySelector('#state').textContent=`Host tab: ${document.visibilityState}. Room: ${room}`;}
+addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==document.querySelector('iframe').contentWindow)return;if(event.data.type==='party-game-ready'){room=event.data.room;const link=document.querySelector('#guest');link.href=`/goblin.html?room=${room}&partyGuest=1`;link.textContent=`Open goblin in room ${room}`;status();}});
+document.addEventListener('visibilitychange',status);status();
+</script></html>
