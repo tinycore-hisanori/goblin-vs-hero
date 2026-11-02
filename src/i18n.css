@@ -1,0 +1,11 @@
+.language-control{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;flex:0 0 auto;margin-left:12px;font:13px/1.2 system-ui,sans-serif;pointer-events:auto;z-index:25;color:#e6dcbf}
+.language-control select{width:auto!important;min-width:94px;margin:0!important;padding:7px 9px!important;border:1px solid #8a825a!important;border-radius:7px!important;background:#18231f!important;color:#f3ead2!important;font:inherit!important;cursor:pointer}
+.language-control:focus-within{outline:2px solid #dabc68;outline-offset:3px;border-radius:7px}
+.language-floating{position:fixed;right:12px;top:12px}
+html[lang=en] .title-copy h1{font-size:clamp(42px,6vw,88px);letter-spacing:-.035em}
+html[lang=en] .entry-choice b{font-size:clamp(20px,2.2vw,27px)}
+html[lang=en] .entry-choice span:not(.choice-arrow){line-height:1.45}
+html[lang=en] button{white-space:normal}
+@media(max-width:650px){body>header{flex-wrap:wrap;gap:8px}.language-control{margin-left:auto;gap:3px}.language-control select{min-width:82px;font-size:12px!important;padding:6px!important}html[lang=en] .title-copy h1{font-size:clamp(38px,10vw,64px)}html[lang=en] .title-subline{font-size:13px}html[lang=en] #camera-preset{max-width:118px}html[lang=en] #friendly-fire-toggle{font-size:11px}html[lang=en] #skill-bar button{font-size:11px}}
+
+html[lang=en] #chat-log:empty::before{content:"Say hello before the adventure. Your crew’s messages appear here."}

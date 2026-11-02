@@ -1,3 +1,4 @@
+import {callbackError} from './twitch-locale.js';
 import {randomBytes,randomInt} from 'node:crypto';
 import {createTwitchProvider} from './twitch-chat.js';
 
@@ -57,7 +58,8 @@ export function createTwitchIntegration({rooms,publicOrigin,clientId=process.env
     let url;try{url=new URL(req.url,'http://localhost');}catch{return false;}
     if(!url.pathname.startsWith('/api/twitch/')&&!url.pathname.startsWith('/auth/twitch/'))return false;
     res.setHeader('Cache-Control','no-store');res.setHeader('Referrer-Policy','no-referrer');
-    const json=(code,value)=>{res.statusCode=code;res.setHeader('Content-Type','application/json; charset=utf-8');res.end(JSON.stringify(value));};
+    const callbackLanguage=pending.get(url.searchParams.get('state'))?.language||'en';
+    const json=(code,value)=>{if(url.pathname==='/auth/twitch/callback'&&value.error)value={...value,error:callbackError(value.error,callbackLanguage)};res.statusCode=code;res.setHeader('Content-Type','application/json; charset=utf-8');res.end(JSON.stringify(value));};
     try {
       if(url.pathname==='/api/twitch/status'&&req.method==='GET'){tick();json(200,status(url.searchParams.get('room'),req));return true;}
       if(!enabled){json(503,{error:'サーバー管理者によるTwitchアプリ設定が必要です'});return true;}
@@ -79,7 +81,7 @@ export function createTwitchIntegration({rooms,publicOrigin,clientId=process.env
         const sid=nonce();sessions.set(sid,{user:link.user,until:link.until});
         res.setHeader('Set-Cookie',['gg_twitch_state=; Path=/auth/twitch; HttpOnly; Secure; SameSite=Lax; Max-Age=0',`gg_twitch=${sid}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200`]);
         res.setHeader('Content-Type','text/html; charset=utf-8');
-        res.end('<!doctype html><html lang="ja"><meta charset="utf-8"><title>Twitch連携完了</title><body style="background:#101a22;color:#eee;font:18px system-ui;padding:40px"><h1>Twitch連携が完了しました</h1><p>このタブを閉じて、ゲームの部屋へ戻ってください。</p></body></html>');return true;
+        const ja=flow.language==='ja';res.end(`<!doctype html><html lang="${ja?'ja':'en'}"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${ja?'Twitch連携完了':'Twitch linked'}</title><body style="background:#101a22;color:#eee;font:18px system-ui;padding:40px"><h1>${ja?'Twitch連携が完了しました':'Twitch account linked'}</h1><p>${ja?'このタブを閉じて、ゲームの部屋へ戻ってください。':'Close this tab and return to your game room.'}</p></body></html>`);return true;
       }
       if(req.method!=='POST'){json(405,{error:'Method not allowed'});return true;}
       if(req.headers.origin!==publicOrigin){json(403,{error:'Invalid origin'});return true;}
@@ -88,7 +90,7 @@ export function createTwitchIntegration({rooms,publicOrigin,clientId=process.env
         clean(pending);const grant=tickets.get(data.ticket);tickets.delete(data.ticket);
         const room=rooms.get(grant?.code);
         if(!grant||grant.until<=now()||room?.owner!==grant.owner||room.phase!=='waiting'||pending.size>=128){json(403,{error:'部屋の管理役が待機画面から連携してください'});return true;}
-        const state=nonce();pending.set(state,{...grant,until:now()+600000});
+        const state=nonce();pending.set(state,{...grant,language:data.language==='ja'?'ja':'en',until:now()+600000});
         res.setHeader('Set-Cookie',`gg_twitch_state=${state}; Path=/auth/twitch; HttpOnly; Secure; SameSite=Lax; Max-Age=600`);
         json(200,{url:'https://id.twitch.tv/oauth2/authorize?'+new URLSearchParams({client_id:clientId,redirect_uri:redirect,response_type:'code',scope:'user:read:chat',state,force_verify:'true'})});return true;
       }

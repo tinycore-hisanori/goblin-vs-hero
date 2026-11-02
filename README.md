@@ -2,11 +2,11 @@
 
 **An asymmetric party dungeon game for Twitch.** The streamer raids a goblin nest in first person, and viewers join as goblins from their phone or PC, with no install and no Twitch login. Everyone else in chat changes the game by voting `1` / `2` / `3`.
 
-Built for the **Codex x TwitchCon Hackathon** with OpenAI Codex. Version 0.1.6.
+Built for the **Codex x TwitchCon Hackathon** with OpenAI Codex. Version 0.1.6. **English and Japanese UI** (English by default; switch in-game), and Twitch vote messages follow the room's language.
 
 - Live: <https://goblin-vs-hero.kitakuarcade.com/party.html>
 - Full game specification (Japanese): [`docs/game-specification.md`](docs/game-specification.md)
-- How it was built with Codex: [`docs/codex-development-log.md`](docs/codex-development-log.md)
+- How it was built with Codex: [`docs/codex-development-log.md`](docs/codex-development-log.md) (English) / [`docs/codex-development-log.ja.md`](docs/codex-development-log.ja.md) (Japanese)
 
 ## How it plays
 
@@ -36,7 +36,7 @@ Production build and tests:
 ```sh
 npm run build
 npm start                                            # node server/production.js
-node --test --test-timeout=20000 scripts/*.test.mjs  # 84 tests (run after build)
+node --test --test-timeout=20000 scripts/*.test.mjs  # 89 tests (run after build)
 ```
 
 ### Twitch chat voting (optional)
@@ -68,7 +68,6 @@ Browser ──HTTPS──▶ Cloudflare (proxy ON) ──HTTPS──▶ nginx :4
 
 ## Known limitations (v0.1.6)
 
-- **The UI text is Japanese only.** English localization is the next milestone. Controls are listed in English in this README.
 - The hero's browser is the match host. If the hero closes or reloads the page, the match ends (no host migration yet).
 - Rooms and matches live in server memory and are not restored after a server restart. Twitch links last up to 12 hours.
 - Verified on desktop Chrome/Edge. Real-phone play and long sessions at the full 6 players have not been fully tested yet.

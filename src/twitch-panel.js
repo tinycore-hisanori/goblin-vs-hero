@@ -1,3 +1,4 @@
+import {t,getLanguage} from './locale.js';
 export function mountTwitchPanel({getState,id,send,frame}) {
   const panel=document.createElement('details');panel.className='twitch-panel';panel.hidden=true;
   panel.innerHTML='<summary>Twitch観客参加</summary><div class="twitch-body"><p class="twitch-description"></p><div class="twitch-choices"></div><p class="twitch-feedback" role="status"></p><div class="twitch-actions"><button class="twitch-connect">自分のTwitchと連携</button><button class="twitch-vote">20秒のチャット投票を開始</button><button class="twitch-disconnect secondary">連携解除</button></div><small>チャットで 1 / 2 / 3。1人1票・変更OK。同票は抽選。参加費・サブスク不要。</small></div>';
@@ -7,12 +8,12 @@ export function mountTwitchPanel({getState,id,send,frame}) {
   connect.onclick=()=>{
     popup=window.open('about:blank','gg-twitch-authorization','popup,width=650,height=780');
     if(!popup){feedback.textContent='Twitch連携用のポップアップを許可してください';return;}
-    popup.document.title='Twitch連携';popup.document.body.textContent='Twitchの認可画面を開いています…';
+    popup.document.title=t('Twitch連携');popup.document.body.textContent=t('Twitchの認可画面を開いています…');
     feedback.textContent='開いた画面で、自分の配信アカウントを認可してください';send({type:'twitch-ticket'});
   };
   async function onMessage(message){
     if(message.type!=='twitch-ticket')return;
-    try{if(!message.ticket)throw Error('公開サーバーの固定部屋で、管理役が連携できます');const result=await post('/auth/twitch/start',{ticket:message.ticket});if(popup&&!popup.closed)popup.location.href=result.url;}
+    try{if(!message.ticket)throw Error('公開サーバーの固定部屋で、管理役が連携できます');const result=await post('/auth/twitch/start',{ticket:message.ticket,language:getLanguage()});if(popup&&!popup.closed)popup.location.href=result.url;}
     catch(error){popup?.close();feedback.textContent=error.message;}
   }
   vote.onclick=async()=>{vote.disabled=true;try{await post('/api/twitch/vote',{room:getState().code});feedback.textContent='投票開始！ 配信画面で選択肢を観客に見せてください';}catch(error){feedback.textContent=error.message;}finally{poll();}};

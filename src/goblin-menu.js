@@ -1,3 +1,4 @@
+import {createLanguageControl} from './i18n.js';
 // Secondary actions live in one drawer, leaving the play surface unobstructed.
 export function mountGoblinMenu({clearInput,focusGame,resumeDirect,onAttackTarget}) {
  const $=id=>document.getElementById(id),drawer=document.querySelector('aside'),surface=document.querySelector('.map-panel');
@@ -9,7 +10,7 @@ export function mountGoblinMenu({clearInput,focusGame,resumeDirect,onAttackTarge
  const settings=document.createElement('section');settings.dataset.panel='settings';settings.innerHTML='<h2>操作と視点</h2><p>画面をドラッグすると視点を回せます。PC：WASD／矢印で移動、左クリックで攻撃、Spaceでジャンプ、Shiftでスニーク、移動キー2回でダッシュ。Eで食べる、2で投石、Fで同族殺しON／OFF、Vで視点変更、Mで地図、Tabでメニュー、Gで進化画面。クリックでカーソル固定、Escで解除。固定できない場合は右ドラッグで視点変更。</p>';
  // Keep one camera button on the field; detailed controls belong in settings.
  $('goblin-world').append($('camera-preset'));
- settings.append($('control-mode'),$('camera-controls'),$('connection'));drawer.append(settings);
+ settings.prepend(createLanguageControl());settings.append($('control-mode'),$('camera-controls'),$('connection'));drawer.append(settings);
  const tactics=drawer.querySelector('[data-panel="tactics"]');tactics.querySelector('.section-title').after($('rest-button'));
  const target=document.createElement('button');target.id='friendly-fire-toggle';target.type='button';target.setAttribute('aria-pressed','false');target.title='F：同族への攻撃を許可／禁止（勇者への攻撃は常に有効）';$('goblin-world').append(target);
  target.onclick=()=>setTarget(target.getAttribute('aria-pressed')!=='true');

@@ -25,7 +25,7 @@ async function harness(t){
   async function message(peer,data,type='lobby'){
     const promise=new Promise(resolve=>{const handler=raw=>{const value=JSON.parse(raw);if(value.type===type){peer.ws.off('message',handler);if(value.type==='lobby')peer.state=value;resolve(value);}};peer.ws.on('message',handler);});peer.ws.send(JSON.stringify(data));return promise;
   }
-  async function begin(peer){const result=await message(peer,{type:'twitch-ticket'},'twitch-ticket');const start=await request('/auth/twitch/start',{method:'POST',body:{ticket:result.ticket}});assert.equal(start.status,200);return {state:new URL(start.json().url).searchParams.get('state'),cookie:start.cookies[0].split(';')[0]};}
+  async function begin(peer,language){const result=await message(peer,{type:'twitch-ticket'},'twitch-ticket');const start=await request('/auth/twitch/start',{method:'POST',body:{ticket:result.ticket,language}});assert.equal(start.status,200);return {state:new URL(start.json().url).searchParams.get('state'),cookie:start.cookies[0].split(';')[0]};}
   async function authorize(peer,user){const flow=await begin(peer);const callback=await request(`/auth/twitch/callback?code=${user}&state=${flow.state}`,{cookie:flow.cookie});assert.equal(callback.status,200);return callback.cookies.find(s=>s.startsWith('gg_twitch=')).split(';')[0];}
   const status=(peer,cookie='')=>request('/api/twitch/status?room='+peer.state.code,{cookie}).then(r=>r.json());
   async function play(peer){await message(peer,peer.state.phase==='finished'?{type:'post-round',action:'same',round:peer.state.round}:{type:'next'});await message(peer,{type:'game-ready',game:'123456'});await message(peer,{type:'started'});}
@@ -134,4 +134,14 @@ test('other Twitch notices expire in four seconds and reset clears visual state 
   let time=0,text='',dark=false;const effects=createTwitchEffects({active:()=>true,now:()=>time,noise:()=>{},goblins:()=>[],maxHp:()=>3,notice:value=>text=value,darken:value=>dark=value});
   for(const kind of ['alarm','supplies']){effects.apply({id:kind,kind});assert.ok(text);time+=4000;effects.tick();assert.equal(text,'');}
   effects.apply({id:'dark',kind:'darkness'});assert.equal(dark,true);effects.reset();assert.equal(dark,false);assert.equal(text,'');
+});
+
+
+test('Twitch callback defaults to English and honors the authorizing browser language',async t=>{
+ const h=await harness(t),en=await h.peer('e'.repeat(24)),ja=await h.peer('f'.repeat(24));
+ const expired=await h.request('/auth/twitch/callback?state=expired');assert.equal(expired.status,400);assert.match(expired.json().error,/Authorization expired/);
+ for(const [peer,language]of [[en,undefined],[ja,'ja']]){
+  const flow=await h.begin(peer,language),response=await h.request(`/auth/twitch/callback?code=${peer.state.code}&state=${flow.state}`,{cookie:flow.cookie});
+  assert.equal(response.status,200);assert.ok(response.text.includes(language==='ja'?'lang="ja"':'lang="en"'));assert.ok(response.text.includes(language==='ja'?'Twitch連携が完了しました':'Twitch account linked'));
+ }
 });

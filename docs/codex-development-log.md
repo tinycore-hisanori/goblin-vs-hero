@@ -1,5 +1,9 @@
 # Codex collaboration record
 
+[Japanese version](codex-development-log.ja.md)
+
+Language editions synchronized: 2026-11-03. Both editions contain the same 37 entries. Entries describe the state at each development milestone; earlier statements about pending features are historical, not the current implementation status. Keep future additions synchronized in both languages.
+
 Date: 2026-10-28 (Asia/Tokyo)
 
 This is a retrospective summary of the actual collaboration, not a verbatim transcript. It must not be represented as an original raw log. Public submission materials will need English text or an English translation.
@@ -59,116 +63,142 @@ A filtered export of 98 visible user/assistant text messages was saved during de
 
 20. The creator requested experience, rewards and evolution. Codex implemented per-round XP, voluntary four-stage evolution using the supplied GLBs, stat/shortcut changes, training and same-team hunting, plus browser-local career merit and cosmetic titles/colors. A same-PC BroadcastChannel viewer-command screen was added to exercise the flow. Tests verify three evolution stages, healing-free HP fraction preservation, reward caps, duplicate-credit limits, training interruption, reconnect persistence and round-only reset. Browser checks verified training XP, title unlocks and Hob evolution. This is local tab-to-tab play, not Twitch or remote multiplayer.
 
-### 21. LAN接続テスト
-- 要望：Twitchを使わず、同じLAN内の別PC・タブレットで遊びたい。
-- BroadcastChannelによる別タブ限定接続を、Vite上のWebSocket中継へ置き換えた。6桁の部屋コード、LAN URL表示、最大6人の参加、端末別ID、指示・スナップショット転送、切断通知を追加。
-- 勇者画面がシミュレーションの主体。60秒の準備ロビーとTwitch連携は未実装。累計は勇者ブラウザに保存。
-- ビルド・成長処理5テスト・LAN中継1テスト成功。LAN IPで開いたブラウザから入室と訓練指示を確認。実物の別PC・タブレットでの到達性は利用者側で確認が必要。
+### 21. LAN connection testing
 
-### 22. 勇者の部屋設定
-- 勇者の出発準備画面の先頭に「ダンジョンを作る」を追加。数字6桁の番号を入力し、現在の巣1種類を選択して部屋設定を送信できる。将来の巣候補は準備中として無効表示。
-- サーバー側で番号形式・重複・巣IDを検証。参加者がいる部屋の番号変更は拒否する。設定成功時に参加URLと表示番号を同期。
-- 指定番号での設定を中継テストとブラウザで確認。現在の実装はLANテストで、60秒準備ロビーは未実装。
+- Request: play with another PC or tablet on the same LAN without using Twitch.
+- Replaced the separate-tab-only BroadcastChannel connection with a WebSocket relay running on Vite. Added six-digit room codes, LAN URL display, up to six participants, device-specific IDs, command and snapshot forwarding, and disconnect notifications.
+- The hero's screen remains responsible for the simulation. The 60-second preparation lobby and Twitch integration were not yet implemented. Lifetime progress was stored in the hero's browser.
+- The build, five progression tests, and one LAN relay test passed. Joining and issuing a training order were verified in a browser opened through the LAN IP. Reachability from a physical second PC or tablet still needed to be checked by the creator.
 
-### 23. 洞穴・変化する通路・罠
-- 岩壁の輪郭を多角形にし、岩の凹凸と天井の鍾乳石を追加。既存の部屋の目印は保持。
-- 工房・食料庫への通路を長い迂回路へ変更。通路の候補を冒険ごとに組み合わせ、東側にも曲がる経路を生成。部屋自体の配置は固定で、全面ランダム生成ではない。
-- 毎試合、棘・毒胞子・鳴子の計12箇所を配置。入口周辺・訓練設備・目的物の直近は除外。棘は予兆からジャンプ、胞子は噴出範囲から離れる、鳴子は周囲のゴブリンを呼ぶ。種類は床色で判別できる。
-- 自動マップは引き続き探索済みのみ。LAN参加者へ勇者側の地形と罠を同期し、ゴブリンの見取り図に種類を表示。
-- 100シードで工房・宝・帰還・訓練設備への到達と罠の配置数を検証。罠の予兆と復帰、既存成長/LANを含む8テストとビルド成功。ブラウザで洞穴の描画を確認。
+### 22. Hero room settings
 
-### 24. 勇者の準備画面を統一
-- 部屋設定のLANテスト開始を削除。部屋・巣の設定をルーレットと同じカード内へ統合し、「部屋設定→装備抽選→出発」に統一。
-- 最下部のボタンだけが抽選後「この装備で出発」になる。そこからLAN参加者のシミュレーションも開始する。参加画面リンクは勇者の開始・装備抽選を行わない。
-- 新しい試合でも準備画面に戻し、装備の自動決定による別の開始経路を廃止。未保存の番号での出発を防止。
-- ビルド成功。ブラウザで部屋設定とルーレットの統合、抽選後の出発ボタンを確認。
+- Added Create Dungeon at the top of the hero's preparation screen. The hero can enter a six-digit numeric code, select the one currently available nest, and submit the room settings. Future nest options are shown as disabled, coming-soon choices.
+- The server validates code format, duplicate codes, and nest IDs. It rejects code changes while participants are present. A successful change synchronizes the join URL and displayed code.
+- Configuring a specified code was verified through a relay test and the browser. This implementation was still for LAN testing; the 60-second preparation lobby was not yet implemented.
 
-### 25. 勇者の帰還報酬・宝物庫・道具店
-- 生還で60金貨と12種類から抽選したお宝1個を獲得。重複は追加25金貨。発見情報は失敗しても残るが、展示と金貨は生還時のみ。結果の二重加算を防止。
-- 収集率25%/50%/75%で投げ石袋/ゴブリン変装セット/身代わり人形の購入権を解放。薬草包帯は初期から購入可能。購入済み道具はルーレットへの追加・除外を選択できる。基本道具と回復保証枠は維持。抽選中・冒険中は購入や変更を固定。
-- 追加道具の効果も実装。包帯は25回復4回、投げ石は前方の壁まで最大8mの着地点で音を立てる。変装は15秒AIの視覚認識を抑え、走行・攻撃・接近で解除。人形は10秒間描画し音を発して近くのAIを誘う。視聴者ゴブリンへの強制誘導はしない。
-- 勇者の進行は同じURL・ブラウザのlocalStorageに保存。金貨や道具を別端末へ同期するアカウント機能は未実装。
-- 帰還報酬・失敗・重複・二重加算防止・収集率解放・購入・抽選候補・保存を4テストで検証。既存を含む12テスト通過。ブラウザで実際の宝物庫と購入条件を確認。追加道具の実戦バランスは今後調整。
+### 23. Cave appearance, changing corridors, and traps
 
-### 26. 子ゴブリンとしての復活
-- 視聴者の死亡処理を勇者の攻撃・同族狩り・AI反撃で共通化。死亡10秒後に小さな子ゴブリン（HP3）で復活し、20秒後に死亡前より1段階下へ成長。元が通常ゴブリンなら通常へ戻る。経験値は成長先の開始値、累計功績は維持。
-- 子ゴブリンは同族狩りの対象にならず、自分からの同族狩り・訓練・進化も禁止。移動・勇者への弱い攻撃・穴掘りは可能だが、子ども期間の穴掘り経験値なし。勇者の攻撃は受ける。
-- 子ども期間中の再死亡では成長予定を維持。成長で抜け道に閉じ込められる場合は復活地点へ戻す。現時点の復活地点は既存の鍛錬場で、専用のゆりかご部屋はまだない。
-- 勇者側で体格と名前表示、視聴者側で復活・成長のカウントダウン、保護対象の選択除外を追加。
-- 通常～ロードの降格、再死亡、10秒復活、予約済み同族狩り・AI反撃の保護を検証。既存と合わせ15テスト通過。
+- Gave rock walls polygonal outlines and added rocky protrusions and ceiling stalactites. Existing room landmarks were retained.
+- Replaced the routes to the workshop and pantry with longer detours. Each adventure combines corridor variants and generates a winding route on the east side. Room positions remain fixed; this is not fully random dungeon generation.
+- Each round places 12 traps in total: spikes, poisonous spores, and alarms. Areas near the entrance, training equipment, and objectives are excluded. Jump over spikes after their warning, move out of spore bursts, and avoid alarms that summon nearby goblins. Floor colors identify the types.
+- The automap still reveals only explored areas. The hero's terrain and traps are synchronized to LAN participants, with trap types shown on the goblin map.
+- Verified workshop, treasure, return-route, and training-station reachability and trap counts across 100 seeds. Eight tests, including trap warning/reset behavior and existing progression/LAN checks, passed, as did the build. Cave rendering was checked in the browser.
 
-### 27. LAN用の固定端末ID
-- 表示名を参加者IDから除去し、ブラウザに保存した24桁のランダムIDに統一。勇者とゴブリンで共通の端末IDを使い、役割と名前を分離した。
-- 同じ部屋での名前更新は既存WebSocketを使う。ホストは既存メンバーの表示名だけを更新し、個体・進化・経験値を維持。
-- 既存のゴブリン功績は同じ端末IDプレフィックスに属する旧記録から、最大功績の1件を新IDに一度だけ引き継ぐ（合算しない）。勇者の金貨・宝物庫も端末ID別キーに移行し、旧記録を保持。
-- 端末IDはブラウザ・接続元URLごと。ブラウザやURLの変更、保存データ削除では同一人物を保証しない。ゴブリン功績の保存先は引き続きホストのブラウザであり、別ホストへの自動同期は未実装。
-- 固定ID、別端末の分離、旧記録移行、名前変更での試合内状態保持を検証。ビルド成功。
+### 24. Unified hero preparation screen
 
-### 28. 最大6人の役割交代ロビー
-- トップを集合ロビーに変更。最大6人（勇者1・ゴブリン5）、6桁の集合番号、勇者辞退、勇者回数が少ない参加者を優先した抽選。同じ集合部屋を維持して次のラウンドへ進む。
-- 集合部屋の管理はLANサーバーが担当。管理役と勇者を分離し、選ばれた勇者のブラウザがそのラウンドのゲーム計算を担当する。物理・戦闘のサーバー権威化はまだ行っていない。管理役退出時は次の参加者に引き継ぎ、勇者退出時はラウンドを中断して集合へ戻す。
-- ラウンド4分。参加者ゴブリンは既存AIを置き換えて総数を維持。1人ではAI相手にテスト可能。準備時は既存ルーレットを使用し、勇者の出発操作後にタイマー開始。出発後に準備画面へ戻っても戦闘・時間は進む。
-- ゴブリンはAuto指示／直接操作を切り替え可能。直接操作はWASD・矢印・タッチボタン、Spaceで勇者攻撃、Fで選択した同族を攻撃。入力はホストで正規化し、0.35秒で失効させる。子ゴブリンの同族保護は維持。
-- ゴブリン累計功績は端末IDをキーにLANサーバーのdata/goblin-careers.jsonへ保存し、新しい勇者のシミュレーションへ渡す。勇者の金貨・宝物庫は本人のブラウザ保存を維持。dataはGit管理外。
-- 6人入室・7人目拒否、辞退、5回の勇者交代、同じ部屋での結果、管理役退出、直接移動の正規化と入力失効を含む19テストとビルドを確認。ブラウザ2接続で役割別画面と自動参加を確認。実機スマホ・6台同時の負荷検証は未実施。
+- Removed the separate LAN test start control from room settings. Integrated room and nest settings into the roulette card, with one flow: Room Setup → Roll Gear → Depart.
+- Only the bottom button becomes Enter with This Gear after rolling. It also starts the simulation for LAN participants. The link to the join screen does not start the hero's game or roll equipment.
+- New rounds return to preparation, eliminating an alternative start path that automatically selected equipment. Departure with an unsaved room code is prevented.
+- The build passed. Browser checks confirmed the combined room-settings/roulette screen and the departure button after rolling.
 
-### 29. ランダム参加と固定部屋の入口
-- 入口を「ランダムメンバーで遊ぶ」「固定メンバーで遊ぶ」に分離。固定側に作成・番号参加・勇者固定／交代の設定を配置。
-- ランダム参加は同じサーバー内のランダム部屋のみを対象に、人数が多い空き部屋へ自動追加。6人で満員なら新しい部屋を作る。プライベート部屋とは分離。
-- 2人で20秒待機、3人以上で残り最大5秒へ短縮。2人未満になったら開始待機を解除。終了後も同じ部屋で次の待機へ進む。勇者候補がいない場合は自動開始しない。
-- ランダム・番号参加とも試合中の入室を許可。途中参加は現在の勇者を変えずゴブリンとして自動合流し、次のラウンドから勇者候補になる。人数が足りない間はAIが担当し、途中参加もAIを置き換える。
-- 固定勇者は固定部屋の管理役がラウンドの合間に指定。退出・辞退で未指定へ戻し、自動で別の人に固定しない。試合中に設定変更できない。試合画面にも退出ボタンを追加。
-- 3テスト追加：自動振り分けと20秒、3人で5秒短縮・人数不足で取消、試合中の合流、満員時の新規部屋、固定部屋分離、連続固定勇者、固定勇者退出時の再指定。既存ロビーテストも通過。
-- 接続先は引き続き現在のLANサーバー。インターネットへのデプロイや不特定多数向けの認証・公開運用はこの変更に含まない。
-- ブラウザ確認：127.0.0.1とLAN IPの2接続が自動マッチし、20秒後に出発準備へ移行。localhostの3接続目が番号なしで同じ進行中部屋へ入り、ゴブリンとして自動参加することを確認。固定部屋でも勇者指定保存と開始ボタンの反映を確認。ビルドと全22テスト成功。スマホ実機・外部インターネットからの接続は未確認。
+### 25. Hero escape rewards, treasury, and item shop
 
-### 30. 固定部屋のLAN招待QR（2026-10-29）
-- 固定部屋に「スマホを招待（QRコード）」、試合画面に「招待QR」を追加。同じ招待ダイアログを開く。
-- LANアドレスの /party.html?room=6桁 をQR化し、読み取り先で固定部屋の番号を入力済みにする。名前入力と参加ボタンで入室。
-- localhost/127.0.0.1をスマホ用QRに使わず、LAN情報から接続先を選ぶ。複数ネットワークがある場合は選択可能。QRはブラウザ内のqrcodeライブラリで生成し、外部サービスには送らない。
-- 生成したPNGをjsQRでデコードし、部屋番号付きURLとの一致を2テストで確認。ビルド成功。ブラウザでQR表示とURLを開いた際の番号入力を確認。スマホ実機での読み取り・到達性は未確認。
+- Escaping awards 60 coins and one treasure drawn from 12 types. A duplicate awards 25 additional coins. Discovery information survives failure, but display collectibles and coins are awarded only on escape. Duplicate result credit is prevented.
+- Collection milestones of 25%/50%/75% unlock the right to purchase the Bag of Stones/Goblin Disguise/Decoy Doll. Herbal Bandages are available for purchase from the start. Purchased items can be included in or excluded from the roulette pool. Basic items and the guaranteed healing slot remain. Purchases and pool changes are locked during rolling and adventures.
+- Implemented the additional item effects. Bandages restore 25 HP with four uses. Thrown stones make a noise at their landing point, up to 8 m ahead or at the first wall. Disguise suppresses AI visual detection for 15 seconds and ends when running, attacking, or approaching closely. The doll remains visible and makes noise for 10 seconds, luring nearby AI. Viewer goblins are not forced to follow it.
+- Hero progress is saved in localStorage for the same URL and browser. Account-based synchronization of coins or items across devices was not yet implemented.
+- Four tests covered escape rewards, failure, duplicates, duplicate-credit prevention, collection unlocks, purchases, roulette candidates, and saving. All 12 tests, including existing tests, passed. The actual treasury and purchase conditions were checked in the browser. Combat balance for the additional items still needed tuning.
 
-### 31. スマホのゴブリン画面を操作画面へ戻す（2026-10-29）
-- 利用者のiPhone画像から、別ウインドウではなく縦長の作戦・功績欄にスクロール位置が残り、マップが画面外になる問題と判明。
-- スマホ幅で参加後の画面を画面高に固定し、「マップ／進化／作戦／報酬」の切り替えへ変更。作戦・功績の縦スクロールは選んだパネル内だけに限定。マップと直接操作ボタン、画面切り替えを常に到達可能にした。
-- 勇者の出発イベントとゲームスナップショットで、1ラウンドにつき一度だけ準備ダイアログ・開いた詳細を閉じ、マップタブとスクロール先頭へ戻す。途中参加にも適用し、開始後に開き直した招待QRなどは繰り返し閉じない。
-- 準備中判定を「装備抽選済み」ではなく「勇者が実際に出発したか」に修正。
-- 390×720のブラウザでタブ切替・マップと直接操作ボタンの同時表示を確認。ページのscrollHeight=720で画面外への全体スクロールがないことを確認。iPhone実機の修正後確認は未実施。
+### 26. Respawning as a young goblin
 
-### 32. スマホ直接操作の仮想ジョイスティック（2026-10-29）
-- 左下に半透明の円形スティック、右下に半透明の勇者攻撃ボタンと小さな同族攻撃ボタンを配置。スマホの直接操作・マップ表示中だけ出す。従来の上部方向ボタンはスマホでは非表示、PCのWASDは維持。
-- スティックの方向と倒し量を移動ベクトルに変換し、中央12%のデッドゾーン、斜め最大速度制限を適用。指を離す・キャンセル・画面を離れる・画面切替で中立へ戻す。
-- Pointer CaptureとポインターIDで移動と攻撃を分離し、2本指で移動しながら攻撃可能。サーバーの攻撃間隔・子ゴブリン保護は維持。
-- ベクトル計算と2本指相当の独立操作、離す／キャンセル／リセットを2テストで検証。関連7テストとビルド成功。390×720のブラウザで配置とドラッグ終了時の中立復帰を確認。スマホ実機での同時タッチは未確認。
+- Unified viewer death handling for hero attacks, goblin hunting, and AI retaliation. After 10 seconds, the player respawns as a small young goblin with 3 HP; after another 20 seconds, it grows into one rank below its pre-death form. A normal goblin returns to normal. EXP resets to the starting value of the resulting form; lifetime renown is retained.
+- Young goblins cannot be hunted by other goblins and cannot hunt goblins, train, or evolve themselves. They can move, weakly attack the hero, and dig, but digging awards no EXP during childhood. The hero can still damage them.
+- Dying again during childhood preserves the planned growth form. If growth would trap the goblin inside a shortcut, it returns to the respawn point. The respawn point was the existing training grounds; a dedicated cradle room did not yet exist.
+- Added body-size and name displays on the hero side, respawn/growth countdowns on the viewer side, and exclusion of protected goblins from target selection.
+- Verified demotion from normal goblin through Lord, repeated death, the 10-second respawn, and protection against queued goblin hunts and AI retaliation. All 15 tests, including existing tests, passed.
 
-### 33. ゴブリンの標準画面を3D追従視点へ（2026-10-29）
-- 地図操作が標準になっていた点を修正。ゴブリン本人の斜め後ろ上方から位置を追うThree.jsの3D画面を追加し、直接操作を初期選択にした。既存の視聴者・AI・進化モデルと勇者モデルを表示する。
-- 地図は右上のミニマップへ縮小し、必要な場合だけ拡大。モバイルの最初のタブは「探索」。Auto指示も3D画面で観察できる。
-- 画面ドラッグでカメラを回転。ジョイスティック・WASDはカメラの方向に合わせた移動へ変換。左下スティックと右下の半透明攻撃ボタンは維持。
-- ホストの位置・向き・進化・子ゴブリン・復活・扉・罠を同期。周囲の岩壁は視界を塞がないようカット表示し、屋根を描かない。テクスチャ上限とスマホの描画頻度を抑えた。
-- カメラ座標変換と追従位置の2テスト追加、全30テストとビルド成功。390×720のブラウザで実GLBモデル・ミニマップ・操作パッド・視点ドラッグを確認し、コンソールエラーなし。スマホ実機の負荷・操作感は未検証。
+### 27. Persistent device IDs for LAN play
 
-### 34. Auto操作・スリープ復帰・通し確認（2026-10-29）
-- 直接操作からAutoへの切替指示が頻度制限で失われる問題、同じマス内の追跡停止、封鎖穴の掘削待ち停止、ラウンドリセット後の入力受付時刻、準備中のゴブリン更新停止を修正。
-- 近い到達可能な同族を自動で選択し、討伐後も次の対象へ進む選択肢を追加。移動・攻撃・掘削などの状態を表示。
-- ロビーとゲーム中継で90秒の切断猶予、同一IDの復帰、画面とAuto設定の保持を追加。明示的な退出と接続断を区別。勇者の完全なページ再読み込みは集合へ戻す。
-- 実画面でAuto2討伐36EXP、訓練102EXP、ホブ進化、ゴブリン画面再読み込み後の102EXP・HP10維持、キング進化HP16、固定勇者継続・役割交代を確認。通信切断を模擬した復帰を含め37テスト・ビルド成功。
-- 内蔵ブラウザのPointer Lock拒否により、勇者のFPS実プレイ→脱出と、実機iPhoneのスリープ復帰は未確認。詳細は docs/integration-check-2026-10-29.md に成功・未確認を分けて記録。
+- Removed display names from participant IDs and standardized on a random 24-character ID saved in the browser. Heroes and goblins use the same device ID, separating identity from role and name.
+- Name changes within the same room use the existing WebSocket. The host updates only the existing member's display name, preserving the goblin instance, evolution, and EXP.
+- Existing goblin renown is migrated once from the single legacy record with the highest renown under the same device-ID prefix; records are not added together. Hero coins and treasury data also migrate to device-ID-specific keys while retaining legacy records.
+- Device IDs are specific to the browser and connection URL. Changing browsers or URLs, or deleting saved data, does not guarantee the same identity. Goblin renown was still stored in the host's browser; automatic synchronization to another host was not yet implemented.
+- Verified persistent IDs, separation between devices, legacy-record migration, and preservation of round state during a name change. The build passed.
 
-### 35. 終了後の再戦・メンバー入替・タイトル復帰（2026-11-02 / v0.1.5）
-- 利用者の要望：勇者の終了画面で「同じメンバーで遊ぶ」「新たに部屋を作って待機」「タイトルに戻る」を選択する。
-- 終了状態を独立させ、勇者が選ぶまで自動再開しない。同じメンバーでは部屋番号と勇者固定／交代設定を維持。新しい部屋では旧部屋を閉じ、勇者だけで新しい募集を開始。旧参加者には終了通知を送る。
-- 新しい部屋の作成、権限、重複操作、固定／交代、切断復帰、満室時の置換を通信テストで検証。全76テストとビルド、製品サーバーのHTTP・ゲームWebSocket・ロビー／チャットのスモークテストに成功。
-- ローカル検証用サーバーから終了イベントを発行し、実際のブラウザーで同じ番号の2人で第2ラウンド、新番号の1人で待機、タイトル復帰を確認。390px幅の終了画面を確認。今回は実プレイによる脱出完了・スマホ実機・公開サーバーへの配置は未実施。
-- 更新用アーカイブ：output/deploy/goblin-vs-hero-latest.tar.gz。build 20261102-211344。
+### 28. Role-rotation lobby for up to six players
 
-### 36. ゴブリン移動表示・ジャンプ・操作統一（2026-11-02 / v0.1.6）
-- 利用者から歩行の巻き戻り、壁の出入り、ジャンプ、勇者と共通のキー操作、同族殺しトグルとショートカットを要望。
-- 実GLBの walking_2 に腰の前後移動が約1.15モデル単位含まれ、ループごとに戻ることを確認。移動アニメーションの水平ルート移動だけを除去し、上下動と関節アニメーションを維持。
-- 視聴者用の壁を固定高の断面表示に変更。距離5mで高さが急変する処理を廃止し、衝突セルからはみ出さない形状・固定バウンディング球に変更。勇者側の壁の高さは維持。
-- 左クリック攻撃、Spaceジャンプ、Shiftスニーク、方向キー2回ダッシュ、E食事、2投石、F同族殺し、V視点、M地図、Tabメニュー、G進化画面。カーソル固定に対応し、不許可のブラウザーでは右ドラッグで視点操作。スマホに跳ぶボタンを追加。
-- 同族殺しは初期OFF。近接・投石・Auto同族狩りをホスト側で制御。OFFに戻すと同族追跡も停止。ONでも勇者を攻撃できる。子ゴブリンの保護を維持。
-- 短いクリックが定期送信の間に消える問題も実ブラウザーで検出し、単発攻撃コマンドを追加。クールダウンはホストで維持。
-- 全84テスト成功。実GLBを複数ループ再生して水平移動が発生しないこと、ジャンプ・床／骨／ベッド着地、二段ジャンプ防止、壁衝突、同族OFF、投石OFF、キー入力を検証。ブラウザーでW移動、Space、F、V、M、Tab、左クリック時の仲間HP（OFFで6のまま、ONで5）、390px幅の跳ぶボタンと配置を確認。ビルドと製品サーバーのHTTP・WebSocketスモーク成功。
-- スマホ実機およびカーソル固定の成功経路は未確認（内蔵ブラウザーは固定を拒否するため、右ドラッグの代替操作を用意）。公開サーバーへの配置は未実施。
-- アーカイブ：output/deploy/goblin-vs-hero-latest.tar.gz、v0.1.6 / build 20261102-225042。
+- Changed the entry screen to a gathering lobby. Supports up to six players (one hero and five goblins), a six-digit gathering code, opting out of the hero role, and a draw favoring participants with fewer hero turns. The same gathering room continues into the next round.
+- The LAN server manages gathering rooms. Room host and hero are separate roles; the chosen hero's browser runs that round's simulation. Physics and combat were not yet server-authoritative. If the host leaves, another participant takes over hosting; if the hero leaves, the round is canceled and everyone returns to the lobby.
+- Rounds last four minutes. Player goblins replace existing AI to maintain the total goblin count. One person can test against AI. Preparation uses the existing roulette; the timer starts when the hero departs. Combat and time continue if the preparation screen is reopened after departure.
+- Goblins can switch between Auto orders and direct control. Direct control uses WASD, arrows, or touch buttons; Space attacks the hero, and F attacks the selected fellow goblin. The host normalizes input and expires it after 0.35 seconds. Young-goblin protection remains.
+- Goblin lifetime renown is saved by device ID in the LAN server's `data/goblin-careers.json` and passed to the new hero's simulation. Hero coins and treasury data remain in the player's own browser. The data directory is excluded from Git.
+- Verified the build and 19 tests covering six players joining, rejection of a seventh, opting out, five hero rotations, results in the same room, host departure, direct-movement normalization, and input expiry. Two browser connections confirmed role-specific screens and automatic joining. Physical-phone testing and simultaneous load testing on six devices were not performed.
+
+### 29. Separate Quick Play and private-room entry points
+
+- Split entry into Quick Play and Play with Friends. The private flow contains room creation, joining by code, and fixed/rotating hero settings.
+- Quick Play only searches random-match rooms on the same server, automatically filling the most populated room with free slots. It creates a new room when the existing room is full at six players. Private rooms are separate.
+- With two players, the lobby waits 20 seconds; with three or more, the remaining wait is shortened to at most five seconds. Falling below two cancels the start countdown. After a round, the same room returns to waiting. A room without a hero volunteer does not start automatically.
+- Both random and code-based joining allow mid-round arrivals. New arrivals automatically join as goblins without replacing the current hero and become eligible for the hero role from the next round. AI fills missing places and is replaced by late arrivals.
+- The private-room host can designate a fixed hero between rounds. If that hero leaves or opts out, the designation is cleared instead of automatically fixing another player. Settings cannot change during a round. Added a leave button to the match screen.
+- Added three tests covering automatic assignment and the 20-second wait, shortening to five seconds with three players and canceling with too few, mid-round joining, new rooms at capacity, separation of private rooms, repeated fixed-hero rounds, and reselection after a fixed hero leaves. Existing lobby tests also passed.
+- Connections still target the current LAN server. Internet deployment, authentication for unknown participants, and public operation were outside this change.
+- Browser checks: connections through 127.0.0.1 and the LAN IP matched automatically and entered preparation after 20 seconds. A third localhost connection joined the same active room without a code and automatically entered as a goblin. Private-room checks confirmed saving the hero selection and its effect on the start button. The build and all 22 tests passed. Physical-phone and external-internet connections were not verified.
+
+### 30. LAN invitation QR codes for private rooms (2026-10-29)
+
+- Added Invite a Phone (QR Code) in private rooms and Invite QR on the match screen. Both open the same invitation dialog.
+- Encodes the LAN address with `/party.html?room=` followed by the six-digit code. Scanning opens the private-room entry screen with the code filled in. Players enter a name and press Join.
+- Uses LAN information to choose the address rather than putting localhost/127.0.0.1 into a phone invitation. Multiple networks can be selected when available. QR codes are generated in the browser with the qrcode library and are not sent to an external service.
+- Two tests decoded the generated PNG with jsQR and checked that it matched the URL and room code. The build passed. Browser checks confirmed QR display and code prefilling when opening the URL. Scanning and reachability on a physical phone were not verified.
+
+### 31. Returning the mobile goblin screen to gameplay (2026-10-29)
+
+- The creator's iPhone screenshot showed that this was not a separate window: the scroll position remained in the long orders/renown panel, leaving the map off-screen.
+- After joining at phone width, the layout is fixed to the viewport height and switches between Map/Evolution/Orders/Rewards. Vertical scrolling for orders and renown is limited to the selected panel. The map, direct-control buttons, and panel navigation remain reachable.
+- The hero-departure event and game snapshot close preparation dialogs and open details once per round, then return to the map tab and scroll to the top. This also applies to late joining, without repeatedly closing an invitation QR reopened after the round starts.
+- Changed the preparation-state check from equipment having been rolled to whether the hero had actually departed.
+- In a 390×720 browser viewport, verified tab switching and simultaneous visibility of the map and direct-control buttons. The page's scrollHeight was 720, with no whole-page scrolling beyond the viewport. The fix was not verified on a physical iPhone.
+
+### 32. Virtual joystick for mobile direct control (2026-10-29)
+
+- Placed a translucent circular stick at the bottom left, with a translucent hero-attack button and a smaller goblin-attack button at the bottom right. They appear only during mobile direct control with the map displayed. The old upper directional buttons are hidden on mobile; PC WASD remains.
+- Converts stick direction and displacement into a movement vector, with a central 12% dead zone and a diagonal maximum-speed limit. Releasing, canceling, leaving the screen, or switching panels resets it to neutral.
+- Pointer capture and pointer IDs separate movement from attack, allowing movement and attacks with two fingers. Server-enforced attack intervals and young-goblin protection remain.
+- Two tests covered vector calculations, independent actions equivalent to two fingers, release, cancel, and reset. Seven related tests and the build passed. A 390×720 browser check confirmed placement and return to neutral after dragging. Simultaneous touches on a physical phone were not verified.
+
+### 33. Default goblin view changed to a following 3D camera (2026-10-29)
+
+- Corrected the use of map controls as the default. Added a Three.js view following the goblin from above and diagonally behind, with direct control selected initially. It displays the existing viewer, AI, evolution, and hero models.
+- Reduced the map to a minimap at the top right, expandable when needed. The initial mobile tab is Explore. Auto orders can also be watched in 3D.
+- Dragging rotates the camera. Joystick and WASD input are converted into camera-relative movement. The lower-left stick and lower-right translucent attack buttons remain.
+- Synchronizes host positions, facing, evolution, young-goblin state, respawns, doors, and traps. Nearby rock walls use a cutaway view to avoid blocking visibility; no roof is drawn. Texture size and mobile rendering frequency are limited.
+- Added two tests for camera-coordinate conversion and follow position. All 30 tests and the build passed. A 390×720 browser check confirmed real GLB models, minimap, control pad, and camera dragging, with no console errors. Performance and control feel on a physical phone were not verified.
+
+### 34. Auto control, sleep recovery, and integration checks (2026-10-29)
+
+- Fixed orders to switch from direct control to Auto being lost to rate limiting, pursuit stopping within the same cell, digging stalls at sealed tunnels, input timestamps after round reset, and goblin updates stopping during preparation.
+- Added an option to automatically select a nearby reachable goblin and move to the next target after a kill. Movement, attack, digging, and other states are displayed.
+- Added a 90-second disconnect grace period to the lobby and game relay, resuming with the same ID and retaining the screen and Auto setting. Explicit leaving is distinguished from disconnection. A full hero-page reload returns the room to the lobby.
+- Verified in the actual UI: two Auto kills yielding 36 EXP, training to 102 EXP, Hobgoblin evolution, retention of 102 EXP and 10 HP after reloading the goblin screen, King evolution with 16 HP, repeated fixed-hero rounds, and role rotation. All 37 tests, including simulated disconnect recovery, and the build passed.
+- The embedded browser rejected pointer lock, so a full hero FPS playthrough through escape and sleep recovery on a physical iPhone were not verified. `docs/integration-check-2026-10-29.md` separates successful checks from unverified behavior.
+
+### 35. Rematches, replacing the crew, and returning to the title (2026-11-02 / v0.1.5)
+
+- Request: give the hero three choices at the end of a round: Play with the Same Crew, Create a New Room, and Back to Title.
+- Made the finished state independent; the game does not restart automatically before the hero chooses. Keeping the crew retains the room code and fixed/rotating hero setting. Creating a new room closes the old one and starts recruitment with only the hero. Previous members receive a room-ended notification.
+- Network tests covered new-room creation, permissions, duplicate operations, fixed/rotating heroes, reconnection, and replacement at room capacity. All 76 tests, the build, and production-server HTTP, game WebSocket, and lobby/chat smoke checks passed.
+- A local test server issued round-end events. Actual browser checks confirmed a second round with two players under the same code, waiting alone under a new code, and returning to the title. The end screen was checked at 390 px width. Escape through actual gameplay, physical-phone testing, and public-server deployment were not performed in this step.
+- Update archive: `output/deploy/goblin-vs-hero-latest.tar.gz`. Build `20261102-211344`.
+
+### 36. Goblin movement rendering, jumping, and consistent controls (2026-11-02 / v0.1.6)
+
+- The creator reported walking snapping backward and walls appearing/disappearing, and requested jumping, controls shared with the hero, a friendly-fire toggle, and shortcuts.
+- Inspected the actual GLB's walking_2 animation and found about 1.15 model units of forward/backward hip motion resetting on every loop. Removed only horizontal root motion from locomotion clips, retaining vertical motion and joint animation.
+- Changed viewer-side walls to a fixed-height cutaway. Removed the abrupt height change at a distance of 5 m, kept geometry within collision cells, and used a fixed bounding sphere. Hero-side wall height remains unchanged.
+- Controls: left-click attack, Space jump, Shift sneak, double-tap a movement direction to sprint, E eat, 2 throw stone, F friendly fire, V camera, M map, Tab menu, and G evolution. Supports pointer lock, with right-drag camera control where it is denied. Added a mobile jump button.
+- Friendly fire defaults to OFF. The host governs friendly damage from melee, stones, and Auto goblin hunting. Switching OFF also cancels pursuit of fellow goblins. The hero remains attackable when ON. Young-goblin protection remains.
+- Browser testing also exposed short clicks being lost between periodic input packets. Added a single-attack command while keeping cooldown enforcement on the host.
+- All 84 tests passed. Verified no horizontal displacement across repeated real-GLB animation loops while retaining vertical motion; jumping and landing on floors, bones, and beds; double-jump prevention; wall collision; friendly-fire OFF; friendly stone-damage OFF; and keyboard input. Browser checks covered W movement, Space, F, V, M, Tab, friendly HP on left click (stays at 6 when OFF, drops to 5 when ON), and the jump button and layout at 390 px width. The build and production-server HTTP/WebSocket smoke checks passed.
+- Physical-phone behavior and successful pointer lock were not verified: the embedded browser denies lock, so right-drag fallback was provided. Public-server deployment was not performed.
+- Archive: `output/deploy/goblin-vs-hero-latest.tar.gz`, v0.1.6 / build `20261102-225042`.
+
+### 37. English-default interface with English/Japanese switching (2026-11-03 / v0.1.7)
+
+- Request: default to English and allow switching between English and Japanese. English is the default, and the language choice is saved in the browser. Added selectors to the title/lobby header, solo-hero preparation screen, and goblin settings screen.
+- Translated more than 660 Japanese UI messages into English, covering the title, lobby, gear rolls, item shop, combat notices, control instructions, evolution/orders/rewards, maps and 3D signs, and Twitch voting/authorization pages.
+- Changing language does not reload the page and propagates to same-origin tabs and iframes. Player names and free chat are excluded from translation. Match state and saved-data IDs are unchanged.
+- Browser checks confirmed English → Japanese → English, retention of room 814279, preservation of the Japanese display name meaning “Hero Goblin” and free chat, the hero iframe's roulette, persistence of Japanese after reload, and initial English on an origin without a saved preference.
+- After W movement in the actual goblin UI, changing language retained position -14.38, 0, 16.95 and 6 HP. Checked attack, jump, stone throwing, and menus at 390 px width. Signs redraw their textures when language changes, fitting long English text within their width.
+- Added tests for translation coverage of extracted text, argument preservation, dynamic numbers and nested messages, names remaining untranslated, and English/Japanese Twitch authorization screens. All 89 tests, the build, and production-server HTTP, game WebSocket, and lobby/chat smoke checks passed.
+- Public-server deployment and physical-phone verification were not performed. Update archive: `output/deploy/goblin-vs-hero-latest.tar.gz`. Build `20261103-045319`.
