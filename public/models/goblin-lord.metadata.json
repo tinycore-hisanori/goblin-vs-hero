@@ -1,0 +1,24 @@
+{
+  "id": "goblin-lord",
+  "name": "ゴブリン・ロード",
+  "role": "viewer-evolution",
+  "source": "Meshy_AI_Ironclad_Goblin_Warlo_All_Animations.glb",
+  "model": "/models/goblin-lord.glb",
+  "joints": 28,
+  "triangles": 22151,
+  "animations": [
+    {
+      "name": "Running",
+      "duration": 0.6333330273628235
+    },
+    {
+      "name": "Walking",
+      "duration": 1.0333329439163208
+    },
+    {
+      "name": "Sit_Cross_Legged_on_Floor",
+      "duration": 2.5
+    }
+  ],
+  "status": "Imported; evolution gameplay integration pending"
+}

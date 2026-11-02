@@ -1,0 +1,26 @@
+[Unit]
+Description=Goblin vs Hero game server
+After=network.target
+
+[Service]
+Type=simple
+User=goblin-game
+Group=goblin-game
+WorkingDirectory=/opt/goblin-vs-hero
+Environment=NODE_ENV=production
+Environment=HOST=127.0.0.1
+Environment=PORT=8788
+Environment=PUBLIC_ORIGIN=https://goblin-vs-hero.kitakuarcade.com
+ExecStart=/opt/goblin-vs-hero/runtime/bin/node server/production.js
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/goblin-vs-hero/data
+UMask=0027
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+{
+  "source": "Meshy_AI_Cyclops_Warbrute_All_Animations.glb",
+  "model": "/models/cyclops.glb",
+  "joints": 28,
+  "animations": [
+    "Running",
+    "Walking",
+    "Punch_Combo",
+    "Reaping_Swing",
+    "Simple_Kick"
+  ]
+}

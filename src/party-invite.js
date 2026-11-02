@@ -1,0 +1,4 @@
+import QRCode from 'qrcode';
+export function invitationAddresses(info,origin){const urls=[];for(const address of info?.addresses||[]){try{const u=new URL('/party.html',address.url);if(!['localhost','127.0.0.1','[::1]'].includes(u.hostname)&&!urls.some(v=>v.url===u.href))urls.push({url:u.href,label:address.interface||u.hostname});}catch{}}try{const u=new URL('/party.html',origin);if(!['localhost','127.0.0.1','[::1]'].includes(u.hostname)){const i=urls.findIndex(v=>new URL(v.url).origin===u.origin);if(i>=0)urls.unshift(...urls.splice(i,1));else urls.unshift({url:u.href,label:'現在の接続先'});}}catch{}return urls;}
+export function invitationURL(base,code){if(!/^\d{6}$/.test(String(code)))throw Error('部屋番号は6桁です');const url=new URL('/party.html',base);url.searchParams.set('room',code);return url.href;}
+export const invitationQR=url=>QRCode.toDataURL(url,{width:280,margin:4,errorCorrectionLevel:'M',color:{dark:'#000000',light:'#ffffff'}});

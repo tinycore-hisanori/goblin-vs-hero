@@ -1,0 +1,27 @@
+{
+  "id": "goblin-king",
+  "name": "ゴブリン・キング",
+  "role": "viewer-evolution",
+  "source": "Meshy_AI_Goblin_King_of_the_Ir_All_Animations.glb",
+  "model": "/models/goblin-king.glb",
+  "joints": [
+    28
+  ],
+  "triangles": 21248,
+  "sourceHeight": 1.7999998331069946,
+  "animations": [
+    {
+      "name": "Running",
+      "duration": 0.6333330273628235,
+      "hipFirstY": 0.885132372379303,
+      "hipLastY": 0.8851324915885925
+    },
+    {
+      "name": "Walking",
+      "duration": 1.0333329439163208,
+      "hipFirstY": 0.9460005760192871,
+      "hipLastY": 0.9460004568099976
+    }
+  ],
+  "status": "Imported; evolution gameplay pending"
+}

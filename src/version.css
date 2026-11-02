@@ -1,0 +1,4 @@
+.game-version{display:block;color:#b2c7c5;font:500 11px/1.6 ui-monospace,monospace;letter-spacing:.3px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.party-card>.game-version{margin:-4px 0 18px}
+.in-room .party-card>.game-version{display:none}
+.edition .game-version{margin-top:7px;color:#c9bc95;font-size:10px}

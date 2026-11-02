@@ -1,0 +1,67 @@
+/* Play surface: compact status and controls, with secondary actions in a drawer. */
+#friendly-fire-toggle{position:absolute;top:96px;left:12px;z-index:7;min-height:42px;padding:8px 12px;border:1px solid #bdd3c044;border-radius:11px;background:#10282dcc;color:#bdd3c0;font-size:11px;touch-action:manipulation}
+#friendly-fire-toggle[aria-pressed="true"]{border-color:#eea786aa;background:#623c33dd;color:#ffe0c7}
+body.joined.viewing-map #friendly-fire-toggle{display:none}
+.touch-jump{position:absolute;right:94px;bottom:0;pointer-events:auto;touch-action:manipulation;width:60px;height:60px;min-height:0;border-radius:50%;border:1px solid #d4dfd477;background:#4c766155!important;color:#e3eed8cc;padding:4px;font-size:12px}
+body.joined>header,body.joined #join-panel,body.joined .map-title,body.joined .legend,body.joined #world-status{display:none}
+body.joined main,body.joined:has(#direct-controls:not([hidden])) main{margin:0;flex:1;height:100dvh!important;min-height:0}
+body.joined .map-panel{position:relative;padding:0;height:100%;gap:0}
+body.joined #goblin-world{height:100%;border:0;border-radius:0;box-shadow:none;min-height:0}
+body.joined #goblin-world[data-view="3d"] #nest{display:none}
+body.joined #goblin-world[data-view="map"] #nest{display:block;inset:0;width:100%;height:100%;border:0;border-radius:0;opacity:1}
+body.joined #combat-hud{top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));bottom:auto;min-width:0;width:140px;padding:9px 11px;background:#0e242bb3;border:1px solid #dce9c426;border-radius:12px;box-shadow:none}
+body.joined #combat-name{font-size:10px}
+body.joined #combat-hp{font-size:10px;margin-left:6px}
+body.joined #combat-xp{font-size:8px;color:#b8c7bb}
+body.joined #rest-status{font-size:9px;line-height:1.5}
+body.joined .combat-health-track{margin:6px 0 3px}
+#menu-toggle,#camera-preset,#world-map-toggle,#resume-direct{position:absolute;z-index:5;min-height:42px;border:1px solid #d6e0c338;border-radius:11px;background:#10282dcc;color:#eee7cf;font-size:11px;backdrop-filter:blur(6px);padding:8px 12px;touch-action:manipulation}
+#menu-toggle{top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));width:76px;min-width:76px;font-size:10px;padding:8px 6px}
+#menu-toggle.evolution-ready{color:#f7dfa8;border-color:#e7c47d99}
+#goblin-world>#camera-preset{top:max(12px,env(safe-area-inset-top));right:96px;min-width:0;width:84px;font-size:10px}
+body.joined #world-map-toggle{top:64px;right:max(12px,env(safe-area-inset-right));font-size:10px;min-width:54px;padding:8px 10px}
+#resume-direct{bottom:max(30px,env(safe-area-inset-bottom));left:16px}
+body.direct-mode #resume-direct{display:none}
+body.joined #skill-bar{right:max(24px,env(safe-area-inset-right));bottom:120px;z-index:6;display:flex;gap:0}
+body.joined #stone-button{width:62px;min-width:0;height:62px;min-height:0;border-radius:50%;padding:5px;text-align:center;font-size:11px;border-color:#d5d9ba66;background:linear-gradient(0deg,#142b36cc var(--cooldown,0%),#3e5954aa var(--cooldown,0%));box-shadow:none}
+body.joined #stone-button>span{display:none}
+body.joined #stone-button small{font-size:10px;color:#ffe0a4;margin-top:3px}
+body.joined #food-actions{bottom:200px;left:50%;transform:translateX(-50%);padding:0;border:0;background:transparent;max-width:calc(100% - 32px);z-index:7}
+body.joined #food-actions>span{display:none}
+body.joined #food-choices{margin:0}
+body.joined #food-choices button{min-height:46px;padding:10px 19px;font-size:12px;border-radius:24px;border-color:#dfce8b99;background:#284d40e8;color:#f4e6ba;box-shadow:0 4px 20px #0003}
+body.joined #toast{position:absolute;top:104px;bottom:auto;left:50%;transform:translateX(-50%);z-index:9;width:max-content;max-width:min(75%,380px);min-height:0;max-height:none;padding:8px 12px;border:0;border-radius:10px;background:#10242be6;color:#dfebdc;font-size:10px;line-height:1.6;text-align:center;pointer-events:none}
+
+/* Drawer replaces the permanent bottom navigation and setup bars. */
+body.joined #goblin-menu{position:absolute;inset:12px 12px 12px auto;width:min(370px,calc(100% - 24px));z-index:20;padding:0 16px 20px;overflow:auto;border:1px solid #8baaa644;border-radius:18px;background:#132c34fa;box-shadow:0 0 0 100vmax #06131877,0 16px 60px #0006}
+body.joined[data-mobile-panel="map"] #goblin-menu{display:none}
+body.joined #goblin-menu>section{display:none}
+body.joined[data-mobile-panel="growth"] #goblin-menu>[data-panel="identity"],body.joined[data-mobile-panel="growth"] #goblin-menu>[data-panel="growth"],body.joined[data-mobile-panel="tactics"] #goblin-menu>[data-panel="tactics"],body.joined[data-mobile-panel="rewards"] #goblin-menu>[data-panel="rewards"],body.joined[data-mobile-panel="settings"] #goblin-menu>[data-panel="settings"]{display:block}
+.menu-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 0;background:#132c34;position:sticky;top:0;z-index:2}
+.menu-heading b{font-size:13px;color:#e9d6aa}
+.menu-heading button{min-height:44px;min-width:70px;background:#29434b}
+body.joined #goblin-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:0 0 12px;background:transparent;border:0}
+body.joined #goblin-nav button{min-width:0;min-height:42px;padding:8px 2px;font-size:11px}
+#goblin-menu #control-mode{padding:8px 0;border:0;background:none;display:block}
+#goblin-menu #direct-controls{display:none!important}
+#goblin-menu #camera-controls{position:static;display:flex;gap:8px;margin:14px 0}
+#goblin-menu #camera-controls button{font-size:12px;min-height:44px;flex:1}
+#goblin-menu #connection{display:block;font-size:11px;color:#a7c1b5;margin-top:18px;max-width:none}
+#goblin-menu #rest-button{width:100%;margin:8px 0 16px;min-height:48px;padding:10px 14px;font-size:13px}
+#goblin-menu #rest-button small{display:inline;margin-left:12px;font-size:10px}
+body.joined:not([data-mobile-panel="map"]) #touch-hud{display:none!important}
+body.joined.viewing-map #touch-hud,body.joined.viewing-map #skill-bar,body.joined.viewing-map #combat-hud,body.joined.viewing-map #food-actions,body.joined.viewing-map #camera-preset,body.joined.viewing-map #resume-direct,body.joined.viewing-map #menu-toggle{display:none!important}
+body.joined.viewing-map #world-map-toggle{top:12px}
+
+@media(max-width:800px),(pointer:coarse){
+ body.joined.direct-mode[data-mobile-panel="map"] #touch-hud{display:block;position:absolute;inset:0;z-index:6;pointer-events:none;user-select:none;-webkit-user-select:none}
+ #goblin-stick{position:absolute;pointer-events:auto;touch-action:none;border-radius:50%;border:2px solid #d8d3b33d;left:max(18px,env(safe-area-inset-left));bottom:max(24px,env(safe-area-inset-bottom));width:112px;height:112px;background:radial-gradient(circle,#92a78212,#344c3540)}
+ #goblin-stick-knob{position:absolute;pointer-events:none;border-radius:50%;border:1px solid #e8e5c566;width:48px;height:48px;left:30px;top:30px;background:radial-gradient(circle at 38% 30%,#ded5a75a,#8fa37460)}
+ #goblin-stick small{display:none}
+ .touch-attacks{position:absolute;pointer-events:none;right:max(18px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));width:82px;height:82px}
+ .touch-hero{position:absolute;right:0;bottom:0;pointer-events:auto;touch-action:none;border-radius:50%;border:1px solid #e0cea575;color:#f4e5bfcc;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:82px;height:82px;background:#947d5055!important;box-shadow:none!important}
+ .touch-hero>span{font-size:26px}.touch-hero>small{font-size:11px}
+}
+@media(min-width:801px) and (pointer:fine){body.joined #skill-bar{bottom:24px;right:24px}body.joined #food-actions{bottom:30px}}
+@media(max-width:360px){body.joined #combat-hud{width:120px;padding:8px}#goblin-world>#camera-preset{width:74px;right:94px;font-size:9px}#menu-toggle{font-size:10px;min-width:74px}}
+@media(max-height:500px){body.joined #food-actions{bottom:28px}body.joined #toast{top:76px}body.joined #goblin-menu{inset:8px 8px 8px auto}}

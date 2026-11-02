@@ -1,0 +1,7 @@
+import {tiles,rooms,world,entrance,leverPosition,treasurePosition} from './dungeon.js';
+export const TRAP_WARNING=.7,TRAP_ACTIVE=.45,TRAP_RESET=3;
+export const trapCells=[[11,9],[12,9],[13,9]];
+export function newTrap(kind='spikes'){return{kind,phase:'idle',time:0,hit:false};}
+export function updateTrap(trap,dt,pressed){if(trap.phase==='idle'){if(pressed){trap.phase='warning';trap.time=trap.kind==='gas'?1.2:TRAP_WARNING;trap.hit=false;}return;}trap.time-=dt;if(trap.time>0)return;if(trap.phase==='warning'){trap.phase='active';trap.time=trap.kind==='gas'?2.2:TRAP_ACTIVE;}else if(trap.phase==='active'){trap.phase='cooldown';trap.time=TRAP_RESET;}else{trap.phase='idle';trap.time=0;}}
+
+export function chooseTraps(random=Math.random){const candidates=[];for(let z=2;z<23;z++)for(let x=1;x<24;x++){if(tiles[z][x]!=='.'||rooms.find(r=>r.id==='training'&&x>=r.x1-1&&x<=r.x2+1&&z>=r.z1-1&&z<=r.z2+1))continue;const p=world(x,z);if([entrance,leverPosition,treasurePosition].some(q=>Math.hypot(p.x-q.x,p.z-q.z)<4))continue;candidates.push([x,z]);}for(let i=candidates.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}const selected=[];for(const [x,z] of candidates){if(selected.every(t=>Math.hypot(t.x-x,t.z-z)>=2.2))selected.push({x,z,kind:['spikes','gas','alarm'][selected.length%3]});if(selected.length===12)break;}return selected;}

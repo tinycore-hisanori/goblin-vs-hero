@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><title>Twitch effects visual regression</title>
+<body><main id="game"></main><div id="vital-panel">HP 150 / 150</div><div id="notice">宝を探して入口へ戻ろう（通常通知はそのまま）</div>
+<div style="position:fixed;right:20px;bottom:20px;z-index:100;background:#192431;padding:16px;color:white"><p>実際の描画キャンバス・通知・8秒タイマーの確認</p><button id="dark">暗闇を発動</button><button id="alarm">騒音を発動</button><button id="finish">ラウンド終了</button></div>
+<script type="module">
+import * as THREE from 'three';
+import '../src/style.css';
+import {createTwitchEffects,mountTwitchPresentation} from '../src/twitch-effects.js';
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);document.querySelector('#game').append(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#60778b');scene.add(new THREE.HemisphereLight(0xffffff,0x444444,3));
+const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,100);camera.position.set(0,2.5,6);camera.lookAt(0,.8,0);
+const floor=new THREE.Mesh(new THREE.BoxGeometry(20,.1,20),new THREE.MeshStandardMaterial({color:'#a39072'}));scene.add(floor);
+for(let i=-2;i<=2;i++){const box=new THREE.Mesh(new THREE.BoxGeometry(.8,1.5,.8),new THREE.MeshStandardMaterial({color:i===0?'#79bb55':'#85715c'}));box.position.set(i*1.4,.8,0);scene.add(box);}
+let active=true,serial=0;const effects=createTwitchEffects({active:()=>active,noise:()=>{},goblins:()=>[],maxHp:()=>3,...mountTwitchPresentation(renderer.domElement)});
+document.querySelector('#dark').onclick=()=>{active=true;effects.apply({id:String(++serial),kind:'darkness'});};
+document.querySelector('#alarm').onclick=()=>{active=true;effects.apply({id:String(++serial),kind:'alarm'});};
+document.querySelector('#finish').onclick=()=>{active=false;effects.reset();};
+function frame(){effects.tick();renderer.render(scene,camera);requestAnimationFrame(frame);}frame();
+</script></body></html>

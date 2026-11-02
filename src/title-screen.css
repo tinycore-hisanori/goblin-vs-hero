@@ -1,0 +1,45 @@
+/* Title scene only. Room controls and the in-game layout retain their existing geometry. */
+body:not(.in-room){background:radial-gradient(ellipse at 15% 0,#173e42 0,transparent 50%),#0b151e}
+body:not(.in-room)>header{background:#0b151ed9;border-bottom-color:#88c2b226}
+body:not(.in-room)>header b{font-size:15px;letter-spacing:.3px}
+body:not(.in-room) #lobby{padding:20px 28px 32px}
+body:not(.in-room) .party-card{width:min(1220px,100%);padding:0}
+.title-stage{position:relative;isolation:isolate;overflow:hidden;min-height:398px;border:1px solid #83b7ad44;border-radius:22px;background:#0a1c29;box-shadow:0 20px 65px #0005}
+.title-keyart{position:absolute;inset:0 0 0 auto;width:80%;height:100%;object-fit:cover;object-position:center 20%;mask-image:linear-gradient(90deg,transparent,#000 14%);z-index:-3}
+.title-stage:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,#071824ed 0,#071824a6 25%,#07182420 49%,transparent 65%),linear-gradient(0deg,#071824b0,transparent 27%)}
+.title-copy{padding:34px 38px 37px;max-width:52%;text-shadow:0 3px 16px #000b}
+.title-eyebrow{display:block;color:#a5d5c1;font-size:10px;font-weight:700;letter-spacing:3px;margin-bottom:16px}
+.title-stage h1{font-family:'Yu Gothic UI','Yu Gothic',system-ui,sans-serif;font-size:clamp(34px,4.2vw,54px);line-height:1.22;letter-spacing:-2px;margin:0;color:#b8e290;font-weight:900;white-space:nowrap}
+.title-stage h1>span{display:block}
+.title-stage h1 .hero-title{font-size:1.32em;color:#ffe3a5;margin-top:1px}
+.title-stage h1 i{display:inline-block;font-family:Georgia,serif;font-size:.46em;font-weight:700;color:#f3f2e4;vertical-align:middle;letter-spacing:-2px;margin:0 10px 4px 2px;transform:rotate(-8deg)}
+.title-tagline{font-size:17px;font-weight:700;line-height:1.7;color:#fff1d7;margin:16px 0 0}
+.title-subline{font-size:11px;color:#c2d5d4;line-height:1.8;margin:5px 0 11px}
+.title-copy .game-version{color:#9dbbbd;font-size:10px;letter-spacing:0;text-shadow:0 1px 5px #000}
+.title-sticker{position:absolute;right:22px;bottom:18px;display:flex;align-items:center;gap:8px;transform:rotate(-3deg);padding:9px 14px;background:#f3d48f;color:#1b2b28;border:2px solid #ffe8b8;border-radius:6px;box-shadow:0 4px 20px #0005;font-size:12px;font-weight:800}
+.title-sticker span{font-size:18px}
+.landing-entry{margin-top:18px;padding:20px 22px;border:1px solid #79aa9c44;border-radius:16px;background:#172a34}
+.entry-grid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:center}
+.entry-name{margin:0;gap:9px;font-size:12px;color:#d4dfd7;font-weight:700}
+.entry-name input{height:45px;background:#101e28;border-color:#83b5a657;font-size:14px;min-width:0;width:100%}
+.entry-name small{font-size:10px;color:#8baaa8;font-weight:400}
+.landing-entry .entry-choices{margin:0;gap:12px}
+.landing-entry .entry-choice{min-height:106px;padding:17px 20px;border-radius:12px;gap:6px;position:relative}
+.landing-entry .entry-choice b{font-size:17px;padding-right:19px}
+.landing-entry .entry-choice>span{font-size:11px;opacity:1;line-height:1.7}
+.entry-choice .choice-arrow{position:absolute;right:18px;top:17px;font-size:24px;font-weight:400;line-height:1}
+.landing-entry .entry-choice.secondary{background:linear-gradient(110deg,#29504b,#233844);color:#e4f0e0;border-color:#7fb49c66}
+.landing-entry .entry-choice.secondary:hover{background:#355b51}
+.landing-platforms{margin:12px 0 0;color:#a6bebb;font-size:10px;line-height:1.6;text-align:right}
+.play-promises{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:18px}
+.play-promise{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid #80b5a733;background:linear-gradient(120deg,#28403b33,transparent);border-radius:0 0 10px 10px}
+.promise-icon{flex:none;width:40px;height:40px;color:#e9ca87}
+.promise-icon svg{width:100%;height:100%}
+.play-promise:nth-child(2) .promise-icon{color:#a5d784}.play-promise:nth-child(3) .promise-icon{color:#c6a3ef}
+.play-promise b{font-size:12px;color:#e3e9dc}.play-promise p{font-size:10px;color:#96b2ae;line-height:1.6;margin:4px 0 0}
+body:not(.in-room) #party-status{font-size:10px;text-align:center;margin:14px 0 0;color:#8ca8a4}
+.in-room .title-stage,.in-room .play-promises{display:none}
+.landing-entry #private-entry{margin-top:18px;border-color:#80b5a733}
+.landing-entry #private-entry h2{font:700 15px system-ui}
+@media(max-width:900px){.title-copy{padding:30px;max-width:56%}.title-stage{min-height:365px}.title-stage h1{font-size:40px}.entry-grid{grid-template-columns:1fr;gap:15px}.entry-name{display:grid;grid-template-columns:100px minmax(0,1fr);align-items:center;column-gap:16px}.entry-name small{grid-column:2}.landing-entry .entry-choice{min-height:96px}.play-promises{gap:8px}.play-promise{padding:12px 8px;gap:8px}.promise-icon{width:32px;height:32px}}
+@media(max-width:600px){body:not(.in-room) #lobby{padding:12px 12px 24px}body:not(.in-room)>header b{font-size:12px}.title-stage{min-height:450px;border-radius:16px}.title-keyart{width:100%;left:0;height:275px;object-position:right center;mask-image:none}.title-stage:before{background:linear-gradient(0deg,#081b28 0,#081b28 30%,#081b2800 67%)}.title-copy{max-width:none;padding:232px 22px 24px;text-shadow:0 2px 12px #000}.title-eyebrow{font-size:9px;margin-bottom:9px;letter-spacing:2px}.title-stage h1{font-size:35px;letter-spacing:-1px;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 6px}.title-stage h1 .hero-title{font-size:1.08em;white-space:nowrap}.title-stage h1 i{font-size:.48em;margin-right:6px}.title-tagline{font-size:15px;margin-top:10px}.title-subline{font-size:10px;margin:4px 0 8px}.title-sticker{top:186px;bottom:auto;right:12px;font-size:10px;padding:6px 9px}.title-sticker span{font-size:14px}.landing-entry{padding:15px;margin-top:12px}.entry-name{grid-template-columns:1fr;gap:7px}.entry-name small{grid-column:1}.landing-entry .entry-choices{grid-template-columns:1fr;gap:9px}.landing-entry .entry-choice{min-height:85px;padding:15px 17px}.landing-entry .entry-choice b{font-size:16px}.landing-platforms{text-align:left;font-size:10px}.play-promises{grid-template-columns:1fr;gap:0;margin-top:14px}.play-promise{padding:12px 10px}.play-promise b{font-size:12px}.play-promise p{font-size:11px}.promise-icon{width:38px;height:38px}}

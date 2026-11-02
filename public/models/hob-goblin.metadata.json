@@ -1,0 +1,31 @@
+{
+  "id": "hob-goblin",
+  "name": "ホブゴブリン",
+  "role": "viewer-evolution",
+  "source": "Meshy_AI_Gribble_the_Goblin_Sc_All_Animations.glb",
+  "model": "/models/hob-goblin.glb",
+  "joints": [
+    28
+  ],
+  "animations": [
+    {
+      "name": "Running",
+      "duration": 0.6333330273628235
+    },
+    {
+      "name": "Walking",
+      "duration": 1.0333329439163208
+    },
+    {
+      "name": "_01a18163_5d08_70bf_80af_d69753befe75",
+      "duration": 2.9666669368743896
+    }
+  ],
+  "status": "Imported; evolution gameplay pending",
+  "sittingAnimation": {
+    "clip": "_01a18163_5d08_70bf_80af_d69753befe75",
+    "semantic": "standing-to-cross-legged-sitting",
+    "loop": false,
+    "clampWhenFinished": true
+  }
+}

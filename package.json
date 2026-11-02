@@ -1,0 +1,21 @@
+{
+  "name": "goblin-dungeon-party",
+  "private": true,
+  "version": "0.1.6",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server/production.js"
+  },
+  "dependencies": {
+    "qrcode": "^1.5.4",
+    "three": "^0.180.0",
+    "ws": "^8.22.0"
+  },
+  "devDependencies": {
+    "jsqr": "^1.4.0",
+    "vite": "^7.1.0"
+  }
+}

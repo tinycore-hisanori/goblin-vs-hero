@@ -1,0 +1,3 @@
+// A random installation ID; display names and room roles never form part of it.
+let volatileId=null;
+export function localDeviceId(storage){if(arguments.length===0){try{storage=globalThis.localStorage;}catch{storage=null;}}try{const old=storage?.getItem('gg-device-v1');if(/^[a-f0-9]{24}$/.test(old||''))return old;}catch{}const bytes=new Uint8Array(12);if(globalThis.crypto?.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);const id=[...bytes].map(v=>v.toString(16).padStart(2,'0')).join('');try{if(storage){storage.setItem('gg-device-v1',id);return id;}}catch{}return volatileId??=id;}

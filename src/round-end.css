@@ -1,0 +1,19 @@
+.round-end[hidden],.round-end [hidden]{display:none!important}
+.round-end{position:fixed;inset:0;z-index:110;overflow:auto;display:grid;place-items:center;padding:28px 18px;background:radial-gradient(ellipse at 50% 10%,#365047,#101f28 60%);color:#e8e9d7;font-family:system-ui,sans-serif}
+.round-end-card{width:min(640px,100%);padding:30px;border:1px solid #c8d2a933;border-radius:22px;background:#142a30e8;box-shadow:0 22px 80px #0005}
+.round-end-card>small{letter-spacing:3px;font-size:10px;color:#dcc591}
+.round-end h2{margin:18px 0 10px;font-size:clamp(22px,3vw,32px);line-height:1.5;color:#f5e7c3;outline:none}
+.round-end p{font-size:12px;line-height:1.8;color:#b5c9bd;margin:8px 0}
+.round-end .round-end-reward{color:#f0cf89}
+.round-end-choices{display:grid;gap:12px;margin-top:24px}
+.round-end button{border:1px solid #adbea744;border-radius:12px;padding:18px 20px;text-align:left;background:#263e43;color:#e5e7d5;font:inherit;cursor:pointer;min-height:48px}
+.round-end button b{display:block;font-size:16px}
+.round-end button span{display:block;font-size:11px;font-weight:400;margin-top:7px;line-height:1.6;opacity:.85}
+.round-end button[data-result-action="same"]{background:#ddc18a;color:#172a2e;border-color:#efd6a4}
+.round-end button[data-result-action="title"]{background:transparent}
+.round-end button:hover:not(:disabled){filter:brightness(1.12)}
+.round-end button:disabled{opacity:.5;cursor:wait}
+.round-end button:focus-visible{outline:2px solid #f3d398;outline-offset:3px}
+.round-end-wait{margin-top:24px}.round-end-wait button{margin-top:16px}
+.round-finished #match>.match-bar,.round-finished #match>.twitch-panel{display:none}
+@media(max-width:600px){.round-end{padding:16px 12px}.round-end-card{padding:22px 18px}.round-end button{padding:15px}.round-end button b{font-size:15px}}

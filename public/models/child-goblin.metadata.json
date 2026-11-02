@@ -1,0 +1,21 @@
+{
+  "id": "child-goblin",
+  "name": "子ゴブリン",
+  "source": "Meshy_AI_Gribble_the_Goblin_All_Animations.glb",
+  "model": "/models/child-goblin.glb",
+  "joints": [
+    28
+  ],
+  "sourceHeight": 1.98,
+  "gameHeight": 0.5,
+  "animations": [
+    {
+      "name": "Running",
+      "duration": 0.633333
+    },
+    {
+      "name": "Walking",
+      "duration": 1.033333
+    }
+  ]
+}
