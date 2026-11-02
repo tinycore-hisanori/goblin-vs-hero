@@ -1,5 +1,7 @@
 # 公開サーバーへの初回配置
 
+> 注記（v0.1.6）：この文書は初回配置時（v0.1.0前後）に書いたもの。その後 Twitch 連携（チャット投票）は実装済みで、自動テストは84件。Twitch の設定は TWITCH-ja.md を参照。
+
 対象: goblin-vs-hero.kitakuarcade.com → nginx → 127.0.0.1:8788
 既存 rumor.kitakuarcade.com / 8787、システムのNode18は変更しない。
 

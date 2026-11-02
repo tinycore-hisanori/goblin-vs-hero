@@ -66,6 +66,14 @@ Browser ──HTTPS──▶ Cloudflare (proxy ON) ──HTTPS──▶ nginx :4
 
 **Updates:** `node deploy/update.mjs /opt/goblin-vs-hero-latest.tar.gz` stages the new version, smoke-tests it on a spare port, backs up code and `data/`, switches over and rolls back automatically if the post-switch check fails.
 
+## Known limitations (v0.1.6)
+
+- **The UI text is Japanese only.** English localization is the next milestone. Controls are listed in English in this README.
+- The hero's browser is the match host. If the hero closes or reloads the page, the match ends (no host migration yet).
+- Rooms and matches live in server memory and are not restored after a server restart. Twitch links last up to 12 hours.
+- Verified on desktop Chrome/Edge. Real-phone play and long sessions at the full 6 players have not been fully tested yet.
+- Not hardened for competitive play: the simulation runs on the hero's client.
+
 ## Architecture
 
 - `server/` is a Node.js lobby, matchmaking and WebSocket relay, plus Twitch OAuth and EventSub (`twitch.js`, `twitch-chat.js`).
