@@ -1,3 +1,61 @@
+# Goblins vs Hero (ゴブリンたち vs 勇者)
+
+**An asymmetric party dungeon game for Twitch.** The streamer raids a goblin nest in first person, and viewers join as goblins from their phone or PC, with no install and no Twitch login. Everyone else in chat changes the game by voting `1` / `2` / `3`.
+
+Built for the **Codex x TwitchCon Hackathon** with OpenAI Codex. Version 0.1.6.
+
+- Live: <https://goblin-vs-hero.kitakuarcade.com/party.html>
+- Full game specification (Japanese): [`docs/game-specification.md`](docs/game-specification.md)
+- How it was built with Codex: [`docs/codex-development-log.md`](docs/codex-development-log.md)
+
+## How it plays
+
+| Role | Who | Goal |
+|---|---|---|
+| Hero | Streamer (PC, FPS view) | Roll 3 tools, pull the vault lever, grab the treasure and **get back to the entrance alive** within 4 minutes |
+| Goblins | Up to 5 viewers (phone or PC, third-person view) + AI fill-ins | Stop the hero: chase, throw stones, use goblin-only tunnels, train and **evolve** (Goblin → Hobgoblin → King → Lord) |
+| Chat | Everyone else on Twitch | 20-second vote: `1` Darkness / `2` Noise (lure AI goblins) / `3` Snacks (heal goblins) |
+
+Viewers join by scanning a QR code or entering a 6-digit room code. Rooms can keep the streamer as the permanent hero or rotate the hero every round.
+
+## Run locally
+
+Requires Node.js 22.12+.
+
+```sh
+npm install
+npm run dev          # http://localhost:5173/party.html
+```
+
+- Hero: open `party.html`, create a room and start (Chrome/Edge recommended; Pointer Lock is required).
+- Goblin: open the same URL in another browser, an incognito window or a phone on the same LAN, and join with the room code or QR.
+- Solo: `index.html?solo=1` (AI goblins only).
+
+Production build and tests:
+
+```sh
+npm run build
+npm start                                            # node server/production.js
+node --test --test-timeout=20000 scripts/*.test.mjs  # 84 tests (run after build)
+```
+
+### Twitch chat voting (optional)
+
+Create a Twitch application and set `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` and the public URL on the server (see [`deploy/TWITCH-ja.md`](deploy/TWITCH-ja.md)). Each streamer then clicks 「自分のTwitchと連携」 (Connect my Twitch) in their room and authorizes `user:read:chat`. Votes are read via EventSub WebSocket and scoped per room. No secrets are stored in this repository.
+
+## Architecture
+
+- `server/` is a Node.js lobby, matchmaking and WebSocket relay, plus Twitch OAuth and EventSub (`twitch.js`, `twitch-chat.js`).
+- The hero's browser runs the authoritative simulation (`src/main.js`, `src/local-session.js`) at about 10 Hz state broadcast. Goblin clients send input at about 20 Hz.
+- Three.js 3D with rigged GLB models (`public/models/`). Character models were generated with Meshy from concept art in `assets/concepts/`.
+- `deploy/` holds nginx, systemd and a safe update script with staging, backup and rollback.
+
+---
+
+# Development notes (historical, Japanese/English mixed)
+
+> The notes below were written during development and may describe earlier milestones. The current behavior is documented in `docs/game-specification.md`.
+
 # Goblin Getaway
 
 PC browser 3D dungeon escape party game. Current milestone: local FPS treasure expedition versus AI goblins. Twitch authentication, viewer command UI, growth and goblin chat are planned and not yet implemented.
